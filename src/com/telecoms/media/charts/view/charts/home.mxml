@@ -49,24 +49,20 @@
 	]]>
 </mx:Script>	
 
-	<mx:VBox>
-		<mx:Label text="Pie Chart" fontSize="16" textAlign="center" fontWeight="bold" width="100%"/>
-		<mx:PieChart id="chart" 
-					 height="100%" 
-					 width="100%"
-					 paddingRight="5" 
-					 paddingLeft="5" 
-					 showDataTips="true" 
-					 dataProvider="{model.appYearDataArray}">
-			<mx:series>
-				<mx:PieSeries 
-					nameField="app"
-					labelPosition="callout" 
-					field="year" 
-					labelFunction="displayGold">
-				</mx:PieSeries>
-			</mx:series>
-		</mx:PieChart>  
+	<mx:Panel title="Column Chart">
+		<mx:PieChart
+			id="myChart"
+			dataProvider="{model.appYearData.dataitem}"
+			showDataTips="true">
+				<mx:series>
+					<mx:PieSeries
+						dataProvider="{model.appYearData.dataitem}"
+						field="GDP"
+						nameField="Country"
+						displayName="IMF(2007)" />
+				</mx:series>
+		</mx:PieChart>
+		<mx:Legend dataProvider="{myChart}"/>
+	</mx:Panel>
 
-	</mx:VBox>
 </mx:Canvas>
