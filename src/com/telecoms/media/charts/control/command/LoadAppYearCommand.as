@@ -16,6 +16,7 @@ package com.telecoms.media.charts.control.command
 	public class LoadAppYearCommand implements ICommand
 	{		
 		private var model:ChartsModelLocator = ChartsModelLocator.getInstance();
+		private	var c:int = 0;
 		public function execute(event:CairngormEvent):void
 		{
 			var responder:Responder = new Responder(onResults,onFault);
@@ -24,17 +25,40 @@ package com.telecoms.media.charts.control.command
 		}
 		private function onFault(event:FaultEvent):void
 		{
-			Alert.show('No photos were found...');
+			Alert.show('No XML file was found...');
 		}
 		private function onResults(event:ResultEvent):void
 		{
 			model.appYearData = event.token.result as XML;
-			var totalApps:int =  model.appYearData.app.length();
-			
-			for(var i:int=0;i<totalApps;i++){
-				model.appYearDataArray.addItem([{ app: "Entertainment", year: 2012, profit:987654 } ]);
-				trace(model.appYearDataArray.source);
+			//fillYearDataArray();
+		}
+		/*private function fillYearDataArray():void
+		{
+			for(var i:int=0;i<model.appYearData.Year.length();i++){
+				var year:String = model.appYearData.Year[i].@date;
+				//var country:String = model.appYearData.Year[i].elements();
+				var traffic:String = model.appYearData.Year[i].child(c);
+				var tempArray:Array = [year,traffic];
+				model.yearRegion.addItem(tempArray);
+			}
+			incrementCountry();
+			//traceXML();
+		}
+		private function incrementCountry():void
+		{
+			c++;
+			if(c>4){
+				c == 0;
+				traceXML();
+			}
+			else
+			{
+				fillYearDataArray();
 			}
 		}
+		private function traceXML():void
+		{
+			trace('Final Output is '+model.yearRegion);
+		}*/
 	}
 }

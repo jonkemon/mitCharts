@@ -1,43 +1,53 @@
 <?xml version="1.0"?>
-<content>
-	<app name="North America">
-	    <year name="2009">150314.76</year>
-	    <year name="2010">292329.28</year>
-	    <year name="2011">542275.10</year>
-	    <year name="2012">961861.48</year>
-	    <year name="2013">1632907.73</year>
-	    <year name="2014">2701882.12</year>
-	</app>
-	<app name="Latin America">
-	    <year name="2009">26427.34</year>
-	    <year name="2010">63535.84</year>
-	    <year name="2011">138744.55</year>
-	    <year name="2012">285420.01</year>
-	    <year name="2013">554968.49</year>
-	    <year name="2014">1025091.71</year>
-	</app>
-	<app name="Asia-Pacific">
-	    <year name="2009">289880.69</year>
-	    <year name="2010">534987.14</year>
-	    <year name="2011">991938.86</year>
-	    <year name="2012">1856075.02</year>
-	    <year name="2013">3504072.15</year>
-	    <year name="2014">6529604.88</year>
-	</app>
-	<app name="Europe">
-	    <year name="2009">216529.45</year>
-	    <year name="2010">423845.50</year>
-	    <year name="2011">804089.42</year>
-	    <year name="2012">1495556.02</year>
-	    <year name="2013">2673398.97</year>
-	    <year name="2014">4488557.83</year>
-	</app>
-	<app name="Africa/Middle East">
-	    <year name="2009">40605.82</year>
-	    <year name="2010">90962.80</year>
-	    <year name="2011">199401.39</year>
-	    <year name="2012">419032.68</year>
-	    <year name="2013">820123.18</year>
-	    <year name="2014">1511089.73</year>
-	</app>
-</content>
+<data>
+	<dataitem>
+		<Year>2009</Year>
+	    <Country>North America</Country>
+	    <Traffic>150314.76</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2009</Year>	
+	    <Country>Latin America</Country>
+	    <Traffic>26427.34</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2009</Year>
+	    <Country>Asia-Pacific</Country>
+	    <Traffic>289880.69</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2009</Year>
+	    <Country>Europe</Country>
+	    <Traffic>216529.45</Traffic>
+	</dataitem>			
+	<dataitem>
+		<Year>2009</Year>
+	    <Country>Africa/Middle East</Country>
+	    <Traffic>40605.82</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2010</Year>
+	    <Country>North America</Country>
+	    <Traffic>292329.28</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2010</Year>	
+	    <Country>Latin America</Country>
+	    <Traffic>63535.84</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2010</Year>
+	    <Country>Asia-Pacific</Country>
+	    <Traffic>534987.14</Traffic>
+	</dataitem>
+	<dataitem>
+		<Year>2010</Year>
+	    <Country>Europe</Country>
+	    <Traffic>423845.50</Traffic>
+	</dataitem>			
+	<dataitem>
+		<Year>2010</Year>
+	    <Country>Africa/Middle East</Country>
+	    <Traffic>90962.80</Traffic>
+	</dataitem>	
+</data>

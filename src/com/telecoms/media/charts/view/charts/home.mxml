@@ -3,7 +3,7 @@
 		height="100%" 
 		width="100%" 
 		horizontalScrollPolicy="off" 
-		verticalScrollPolicy="off"
+		verticalScrollPolicy="on"
 		y="0" 
 		autoLayout="false" xmlns:mx1="library://ns.adobe.com/flex/mx"
 		>
@@ -21,15 +21,7 @@
 		private var tween:Tween;
 		private var itemIndex:int = 0;
 		private var totalImages:int = -3;
-		
-		[Bindable]
-		private var medalsAC:ArrayCollection = new ArrayCollection( [
-			{ Country: "USA", Gold: 35, Silver:39, Bronze: 29 },
-			{ Country: "China", Gold: 32, Silver:17, Bronze: 14 },
-			{ Country: "Russia", Gold: 27, Silver:27, Bronze: 38 } ]);
-		private var tempArr:Array = new Array;
 
-		
 		private function displayGold(data:Object, field:String, index:Number, percentValue:Number):String {
 			var temp:String= (" " + percentValue).substr(0,6);
 			return data.app + ": " + '\n' + "Total Gold: " + data.year + '\n' + temp + "%";
@@ -41,28 +33,77 @@
 			var event:LoadAppYearEvent=null;
 			event=new LoadAppYearEvent();
 			event.dispatch();
-			
-			tempArr.push('Biff', 'Guy', 'Stuff');
-			var guy:Array = medalsAC.toArray();
 		}
-
+		
+		// Exploding wedges using array data as radius amount
+		private function explodeSlice(event:Event):void
+			{
+				model.explodingArray = [0,0,0,0,0,0];
+				model.explodingArray[event.target.selectedChartItem.index]=0.1;
+				pieChart.series[0].perWedgeExplodeRadius = model.explodingArray;
+			}
 	]]>
 </mx:Script>	
-
-	<mx:Panel title="Column Chart">
-		<mx:PieChart
-			id="myChart"
-			dataProvider="{model.appYearData.dataitem}"
-			showDataTips="true">
-				<mx:series>
-					<mx:PieSeries
-						dataProvider="{model.appYearData.dataitem}"
-						field="GDP"
-						nameField="Country"
-						displayName="IMF(2007)" />
-				</mx:series>
-		</mx:PieChart>
-		<mx:Legend dataProvider="{myChart}"/>
+	
+	<!-- Define custom colors for use as fills in the AreaChart control. -->
+	<mx:SolidColor id="sc1" color="blue" alpha=".3"/>
+	<mx:SolidColor id="sc2" color="red" alpha=".3"/>
+	<mx:SolidColor id="sc3" color="green" alpha=".3"/>
+	<mx:SolidColor id="sc4" color="black" alpha=".3"/>
+	<mx:SolidColor id="sc5" color="yellow" alpha=".3"/>
+	
+	<!-- Define custom Strokes. -->
+	<mx:Stroke id = "s1" color="blue" weight="2"/>
+	<mx:Stroke id = "s2" color="red" weight="2"/>
+	<mx:Stroke id = "s3" color="green" weight="2"/>
+	<mx:Stroke id = "s4" color="black" weight="2"/>
+	<mx:Stroke id = "s5" color="yellow" weight="2"/>
+	
+	<mx:SeriesInterpolate id="interpolate" duration="1000"/>
+	
+<mx:VBox>
+	<mx:Panel width="600" title="Mobile Internet Traffic">
+		<mx:HBox width="100%" height="100%" horizontalAlign="left">
+			<mx:Legend dataProvider="{pieChart}" width="150" height="100%" paddingTop="30" paddingLeft="30" markerWidth="50"/>
+			<mx:PieChart
+				id="pieChart"
+				dataProvider="{model.appYearData.Year}"
+				showDataTips="true"
+				width="300" 
+				height="300" selectionMode="single" itemClick="explodeSlice(event)"
+				>
+					<mx:series>
+						<mx:PieSeries
+							dataProvider="{model.appYearData.Year}"
+							field="NorthAmerica"
+							nameField="@date"
+							perWedgeExplodeRadius="{model.explodingArray}"
+							showDataEffect="interpolate"
+							/>
+					</mx:series>
+			</mx:PieChart>
+		</mx:HBox>	
+	
+		<mx:Legend dataProvider="{Areachart}" width="100%" height="30" paddingLeft="30"/>
+		
+		<mx:AreaChart id="Areachart" height="250" width="100%"
+					  paddingLeft="5" paddingRight="5" 
+					  showDataTips="true" dataProvider="{model.appYearData.Year}">
+			
+			<mx:horizontalAxis>
+				<mx:CategoryAxis categoryField="@date"/>
+			</mx:horizontalAxis>
+			
+			<mx:series>
+				<mx:AreaSeries yField="NorthAmerica" form="curve" displayName="North America" areaStroke="{s1}" areaFill="{sc1}"/>
+				<mx:AreaSeries yField="LatinAmerica" form="curve" displayName="Latin America" areaStroke="{s2}" areaFill="{sc2}"/>
+				<mx:AreaSeries yField="Asia-Pacific" form="curve" displayName="Asia-Pacific" areaStroke="{s3}" areaFill="{sc3}"/>
+				<mx:AreaSeries yField="Europe" form="curve" displayName="Europe" areaStroke="{s4}" areaFill="{sc4}"/>
+				<mx:AreaSeries yField="Africa-MiddleEast" form="curve" displayName="Africa/Middle-East" areaStroke="{s5}" areaFill="{sc5}"/>
+			</mx:series>
+		</mx:AreaChart>
 	</mx:Panel>
+
+</mx:VBox>
 
 </mx:Canvas>
