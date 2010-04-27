@@ -16,6 +16,7 @@
 		import mx.charts.Legend;
 		import mx.charts.PieChart;
 		import mx.charts.chartClasses.Series;
+		import mx.charts.events.ChartItemEvent;
 		import mx.charts.series.ColumnSeries;
 		import mx.charts.series.ColumnSet;
 		import mx.charts.series.PieSeries;
@@ -68,11 +69,12 @@
 		}
 		
 		// Exploding wedges using array data as radius amount
-		private function explodeSlice(event:Event):void
+		private function explodeSlice(e:ChartItemEvent):void
 			{
 				model.explodingArray = [0,0,0,0,0,0];
-				model.explodingArray[event.target.selectedChartItem.index]=0.1;
-				//pieChart.series[0].perWedgeExplodeRadius = model.explodingArray;
+				//event.target.selectedChartItem.index
+				model.explodingArray[e.hitData.chartItem.index]=0.1;
+				chart.series[0].perWedgeExplodeRadius = model.explodingArray;
 			}
 		private function drillDown(e:Event):void
 		{
@@ -81,14 +83,10 @@
 			if(model.dataState){
 				panelActionscript.removeChildAt(1);
 				createPieChart(e);
-				//isoPieChart.series = newSeries;
-				//ColumnChart1.series = newSeries;
 			}
 			else{
 				panelActionscript.removeChildAt(1);
 				createPieChart(e);
-				//isoPieChart.series = newSeries;
-				//stackedColumnChart.series = newSeries;
 			}
 		}
 		private function serviceSlice():void
@@ -182,6 +180,8 @@
 			series = new PieSeries();
 			series.nameField = "@date";
 			series.field = e.currentTarget.yField;
+			series.perWedgeExplodeRadius = model.explodingArray;
+			series.setStyle("showDataEffect", interpolate);
 			
 			/* Remove default dropshadow filter. */
 			series.filters = [];
@@ -199,6 +199,7 @@
 			legend1.dataProvider = chart;
 			
 			/* Add chart to the display list. */
+			chart.addEventListener(ChartItemEvent.ITEM_CLICK, explodeSlice);
 			panelActionscript.addChildAt(chart, 1);
 		}
 	]]>
