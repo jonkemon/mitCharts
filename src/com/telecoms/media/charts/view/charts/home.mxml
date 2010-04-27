@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#FFFFFF" 
-		height="100%" 
 		width="100%" 
 		horizontalScrollPolicy="off" 
-		verticalScrollPolicy="on"
+		verticalScrollPolicy="off"
 		y="0" 
-		autoLayout="false" xmlns:mx1="library://ns.adobe.com/flex/mx"
+		autoLayout="false" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:s="library://ns.adobe.com/flex/spark"
 		>
 <mx:Script>
 	<![CDATA[
 		import com.telecoms.media.charts.control.events.charts.LoadAppYearEvent;
 		import com.telecoms.media.charts.model.ChartsModelLocator;
 		
+		import mx.charts.CategoryAxis;
+		import mx.charts.ColumnChart;
+		import mx.charts.Legend;
+		import mx.charts.PieChart;
+		import mx.charts.chartClasses.Series;
+		import mx.charts.series.ColumnSeries;
+		import mx.charts.series.ColumnSet;
+		import mx.charts.series.PieSeries;
 		import mx.collections.ArrayCollection;
 		import mx.effects.Tween;
 		import mx.events.ListEvent;
@@ -21,7 +28,32 @@
 		private var tween:Tween;
 		private var itemIndex:int = 0;
 		private var totalImages:int = -3;
+		public var serviceArray:Array = new Array;
+		public var serviceColumn:ColumnSeries = new ColumnSeries;
+		public var stackedColumnChart:ColumnChart;
+		public var isoPieChart:PieChart;
+		public var newSeries:Array;
+		
+		private var medalsAC:ArrayCollection;
+		private var chart:PieChart;
+		private var series:PieSeries;
+		
+		/**
+		 * Create and return a simple ArrayCollection to
+		 * use as a data provider.
+		 */
+		private function getDataProvider():ArrayCollection {
+			var arr:Array = [];
+			arr.push({label:"Product 1", data:3});
+			arr.push({label:"Product 2", data:1});
+			arr.push({label:"Product 3", data:4});
+			arr.push({label:"Product 4", data:1});
+			arr.push({label:"Product 5", data:5});
+			arr.push({label:"Product 6", data:9});
+			return new ArrayCollection(arr);
+		}
 
+		
 		private function displayGold(data:Object, field:String, index:Number, percentValue:Number):String {
 			var temp:String= (" " + percentValue).substr(0,6);
 			return data.app + ": " + '\n' + "Total Gold: " + data.year + '\n' + temp + "%";
@@ -30,9 +62,9 @@
 		// Load Image data
 		public function loadXML():void
 		{
-			var event:LoadAppYearEvent=null;
-			event=new LoadAppYearEvent();
-			event.dispatch();
+			var appEvent:LoadAppYearEvent=null;
+			appEvent=new LoadAppYearEvent();
+			appEvent.dispatch();
 		}
 		
 		// Exploding wedges using array data as radius amount
@@ -40,8 +72,135 @@
 			{
 				model.explodingArray = [0,0,0,0,0,0];
 				model.explodingArray[event.target.selectedChartItem.index]=0.1;
-				pieChart.series[0].perWedgeExplodeRadius = model.explodingArray;
+				//pieChart.series[0].perWedgeExplodeRadius = model.explodingArray;
 			}
+		private function drillDown(e:Event):void
+		{
+			newSeries = new Array();
+			newSeries.push(e.currentTarget);
+			if(model.dataState){
+				panelActionscript.removeChildAt(1);
+				createPieChart(e);
+				//isoPieChart.series = newSeries;
+				//ColumnChart1.series = newSeries;
+			}
+			else{
+				panelActionscript.removeChildAt(1);
+				createPieChart(e);
+				//isoPieChart.series = newSeries;
+				//stackedColumnChart.series = newSeries;
+			}
+		}
+		private function serviceSlice():void
+		{
+			
+			serviceColumn.xField = model.appYearData.Year.@date;
+			for(var i:int = 0; i < 6; i++){
+			serviceColumn = new ColumnSeries;
+			serviceColumn.yField = model.appYearData.Year[i].Communication;
+			trace(serviceColumn.yField);
+			serviceColumn.displayName = 'Communication';
+			serviceArray.push(serviceColumn);
+			}
+			//ColumnChart.series = serviceArray;
+			trace(serviceArray);
+		}
+		
+		private function stateSelect():void
+		{
+			if(model.dataState){
+				panelActionscript.removeChildAt(1);
+				model.dataState = false;
+				createColChart();
+			}
+			else{
+				panelActionscript.removeChildAt(1);
+				panelActionscript.addChildAt(ColumnChart1, 1);
+				model.dataState = true;
+				legend1.dataProvider = ColumnChart1;
+			}
+		}
+		
+		private function createColChart():void
+		{
+			// Create a column chart object
+			stackedColumnChart = new ColumnChart();
+			stackedColumnChart.dataProvider = model.appYearData.Year;
+			stackedColumnChart.showDataTips = true;
+			stackedColumnChart.height   = 250;
+			stackedColumnChart.percentWidth = 100;
+			
+			// Set the horizontal axix category
+			var xAxis:CategoryAxis = new CategoryAxis();
+			xAxis.categoryField = "@date";
+			stackedColumnChart.horizontalAxis = xAxis;
+			
+			// ColumnSet.series is an array which contains
+			// an array of ColumnSeries objects.
+			var columnSet:ColumnSet = new ColumnSet();
+			columnSet.type = "stacked";
+			
+			// Each item in seriesDetails becomes a different segment of
+			// a column in the stacked chart i.e. each item represents a series.
+			var seriesDetails:ArrayCollection = new ArrayCollection([
+				{YField:"Communication", DisplayName:"Communication"},
+				{YField:"Entertainment", DisplayName:"Entertainment"},
+				{YField:"VideoTV", DisplayName:"Video/TV"},
+				{YField:"Information", DisplayName:"Information"},
+				{YField:"MobileBrowsing", DisplayName:"Mobile Browsing"},
+				{YField:"Portable", DisplayName:"Portable"}
+			]);
+			
+			// Create a ColumnSeries, and an array to be
+			// populated with dynamically generated columnSeries objects
+			var columnSeries:ColumnSeries;
+			var seriesArray:Array = new Array();
+			
+			// Generate an array of ColumnSeries objects
+			// which are then be applied to the ColumnSet series.
+			for(var i:int = 0; i < seriesDetails.length; i++){
+				columnSeries = new ColumnSeries();
+				columnSeries.yField = seriesDetails[i].YField;
+				columnSeries.displayName = seriesDetails[i].DisplayName;
+				columnSeries.addEventListener(MouseEvent.CLICK, drillDown);
+				seriesArray.push(columnSeries);
+			}
+			columnSet.series = seriesArray;
+			
+			
+			// c.series could take an array of column sets
+			// for displaying mixed charts i.e. c.series = [columnSet1, columnSet2];
+			stackedColumnChart.series = [columnSet];
+			
+			legend1.dataProvider = stackedColumnChart;
+			panelActionscript.addChildAt(stackedColumnChart, 1);
+		}
+		
+		private function createPieChart(e:Event):void
+		{
+			/* Define pie series. */
+			series = new PieSeries();
+			series.nameField = "@date";
+			series.field = e.currentTarget.yField;
+			
+			/* Remove default dropshadow filter. */
+			series.filters = [];
+			
+			/* Define pie chart. */
+			chart = new PieChart();
+			chart.percentWidth = 100;
+			chart.height = 250;
+			chart.showDataTips = true;
+			
+			chart.dataProvider = model.appYearData.Year;
+			chart.series = [series];
+			
+			/* Update Legend */
+			legend1.dataProvider = chart;
+			
+			/* Add chart to the display list. */
+			panelActionscript.addChildAt(chart, 1);
+		}
 	]]>
 </mx:Script>	
 	
@@ -62,8 +221,8 @@
 	<mx:SeriesInterpolate id="interpolate" duration="1000"/>
 	
 <mx:VBox>
-	<mx:Panel width="600" title="Mobile Internet Traffic">
-		<mx:HBox width="100%" height="100%" horizontalAlign="left">
+	<mx:Panel width="600" title="Mobile Internet Traffic" id="panelActionscript"  horizontalAlign="center">
+		<!--<mx:HBox width="100%" height="100%" horizontalAlign="left">
 			<mx:Legend dataProvider="{pieChart}" width="150" height="100%" paddingTop="30" paddingLeft="30" markerWidth="50"/>
 			<mx:PieChart
 				id="pieChart"
@@ -82,26 +241,27 @@
 							/>
 					</mx:series>
 			</mx:PieChart>
-		</mx:HBox>	
-	
-		<mx:Legend dataProvider="{Areachart}" width="100%" height="30" paddingLeft="30"/>
+		</mx:HBox>-->	
+
+		<mx:Legend id="legend1" dataProvider="{ColumnChart1}" width="100%" height="30" paddingLeft="30" horizontalGap="6"/>
 		
-		<mx:AreaChart id="Areachart" height="250" width="100%"
-					  paddingLeft="5" paddingRight="5" 
+		<mx:ColumnChart id="ColumnChart1" height="250" width="100%"
+					  paddingLeft="5" paddingRight="5" type="stacked" 
 					  showDataTips="true" dataProvider="{model.appYearData.Year}">
 			
-			<mx:horizontalAxis>
-				<mx:CategoryAxis categoryField="@date"/>
-			</mx:horizontalAxis>
-			
 			<mx:series>
-				<mx:AreaSeries yField="NorthAmerica" form="curve" displayName="North America" areaStroke="{s1}" areaFill="{sc1}"/>
-				<mx:AreaSeries yField="LatinAmerica" form="curve" displayName="Latin America" areaStroke="{s2}" areaFill="{sc2}"/>
-				<mx:AreaSeries yField="Asia-Pacific" form="curve" displayName="Asia-Pacific" areaStroke="{s3}" areaFill="{sc3}"/>
-				<mx:AreaSeries yField="Europe" form="curve" displayName="Europe" areaStroke="{s4}" areaFill="{sc4}"/>
-				<mx:AreaSeries yField="Africa-MiddleEast" form="curve" displayName="Africa/Middle-East" areaStroke="{s5}" areaFill="{sc5}"/>
+				<mx:ColumnSeries id="cs1" yField="NorthAmerica" xField="@date" displayName="North America" click="drillDown(event)"/>
+				<mx:ColumnSeries id="cs2" yField="LatinAmerica" xField="@date" displayName="Latin America" click="drillDown(event)"/>
+				<mx:ColumnSeries id="cs3" yField="Asia-Pacific" xField="@date" displayName="Asia-Pacific" click="drillDown(event)"/>
+				<mx:ColumnSeries id="cs4" yField="Europe" xField="@date" displayName="Europe" click="drillDown(event)"/>
+				<mx:ColumnSeries id="cs5" yField="Africa-MiddleEast" xField="@date" displayName="Africa/Middle-East" click="drillDown(event)"/>
 			</mx:series>
-		</mx:AreaChart>
+		</mx:ColumnChart>
+
+		<mx:HBox paddingLeft="460" paddingBottom="4">
+			<s:RadioButton label="Region" click="stateSelect();" selected="true"/>
+			<s:RadioButton label="Service" click="stateSelect();"/>
+		</mx:HBox>
 	</mx:Panel>
 
 </mx:VBox>

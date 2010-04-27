@@ -30,6 +30,7 @@ package com.telecoms.media.charts.control.command
 		private function onResults(event:ResultEvent):void
 		{
 			model.appYearData = event.token.result as XML;
+
 			//fillYearDataArray();
 		}
 		/*private function fillYearDataArray():void

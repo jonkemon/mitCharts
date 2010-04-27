@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<data>
+	<dataitem>
+	    <Country>United States</Country>
+	    <GDP>123456</GDP>
+	</dataitem>
+	<dataitem>
+	    <Country>China</Country>
+	    <GDP>234567</GDP>
+	</dataitem>
+	<dataitem>
+	    <Country>Japan</Country>
+	    <GDP>345678</GDP>
+	</dataitem>
+	<dataitem>
+	    <Country>India</Country>
+	    <GDP>457899</GDP>
+	</dataitem>			
+</data>

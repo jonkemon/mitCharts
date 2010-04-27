@@ -6,6 +6,12 @@
 	    <Asia-Pacific>289880.69</Asia-Pacific>
 	    <Europe>216529.45</Europe>
 	    <Africa-MiddleEast>40605.82</Africa-MiddleEast>
+	    <Communication>33570</Communication>
+	    <Entertainment>50745</Entertainment>
+	    <VideoTV>78254</VideoTV>
+	    <Information>4891</Information>
+	    <MobileBrowsing>73652</MobileBrowsing>
+	    <Portable>482646</Portable>
 	</Year>
 	<Year date="2010">
 	    <NorthAmerica>292329.28</NorthAmerica>
@@ -13,6 +19,12 @@
 	    <Asia-Pacific>961861.48</Asia-Pacific>
 	    <Europe>1632907.73</Europe>
 	    <Africa-MiddleEast>2701882.12</Africa-MiddleEast>
+	    <Communication>44126</Communication>
+	    <Entertainment>71378</Entertainment>
+	    <VideoTV>132614</VideoTV>
+	    <Information>8436</Information>
+	    <MobileBrowsing>128302</MobileBrowsing>
+	    <Portable>1020804</Portable>
 	</Year>
 	<Year date="2011">
 	    <NorthAmerica>542275.10</NorthAmerica>
@@ -20,6 +32,12 @@
 	    <Asia-Pacific>991938.86</Asia-Pacific>
 	    <Europe>804089.42</Europe>
 	    <Africa-MiddleEast>199401.39</Africa-MiddleEast>
+	    <Communication>59341</Communication>
+	    <Entertainment>102549</Entertainment>
+	    <VideoTV>217832</VideoTV>
+	    <Information>14235</Information>
+	    <MobileBrowsing>218728</MobileBrowsing>
+	    <Portable>2063766</Portable>
 	</Year>
 	<Year date="2012">
 	    <NorthAmerica>961861.48</NorthAmerica>
@@ -27,6 +45,12 @@
 	    <Asia-Pacific>1856075.02</Asia-Pacific>
 	    <Europe>1495556.02</Europe>
 	    <Africa-MiddleEast>419032.68</Africa-MiddleEast>
+	    <Communication>83367</Communication>
+	    <Entertainment>152940</Entertainment>
+	    <VideoTV>355642</VideoTV>
+	    <Information>23830</Information>
+	    <MobileBrowsing>374197</MobileBrowsing>
+	    <Portable>4027969</Portable>
 	</Year>
 	<Year date="2013">
 	    <NorthAmerica>1632907.73</NorthAmerica>
@@ -34,6 +58,12 @@
 	    <Asia-Pacific>3504072.15</Asia-Pacific>
 	    <Europe>2673398.97</Europe>
 	    <Africa-MiddleEast>820123.18</Africa-MiddleEast>
+	    <Communication>121893</Communication>
+	    <Entertainment>233308</Entertainment>
+	    <VideoTV>568685</VideoTV>
+	    <Information>39185</Information>
+	    <MobileBrowsing>638327</MobileBrowsing>
+	    <Portable>7584072</Portable>
 	</Year>
 	<Year date="2014">
 	    <NorthAmerica>2701882.12</NorthAmerica>
@@ -41,5 +71,11 @@
 	    <Asia-Pacific>6529604.88</Asia-Pacific>
 	    <Europe>4488557.83</Europe>
 	    <Africa-MiddleEast>1511089.73</Africa-MiddleEast>
+	    <Communication>182505</Communication>
+	    <Entertainment>354757</Entertainment>
+	    <VideoTV>892472</VideoTV>
+	    <Information>62597</Information>
+	    <MobileBrowsing>1065881</MobileBrowsing>
+	    <Portable>13698014</Portable>
 	</Year>
 </content>

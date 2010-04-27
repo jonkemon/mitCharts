@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" height="100%" width="100%" backgroundColor="#CCCCCC"
-	paddingTop="0" paddingRight="0" paddingBottom="0"
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" height="500" width="100%" backgroundColor="#CCCCCC"
+	paddingTop="0" paddingRight="0" paddingBottom="0" verticalScrollPolicy="off"
 	paddingLeft="0" creationComplete="chartHome.loadXML()" xmlns:charts="com.telecoms.media.charts.view.charts.*">
 	<control:PTController xmlns:control="com.telecoms.media.charts.control.*"/>
 	<rds:Services xmlns:rds="com.telecoms.media.charts.business.*"/>

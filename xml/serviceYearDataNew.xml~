@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<content>
+	<Year date="2009">
+	    <Communication>33570</Communication>
+	    <Entertainment>50745</Entertainment>
+	    <VideoTV>78254</VideoTV>
+	    <Information>4891</Information>
+	    <MobileBrowsing>73652</MobileBrowsing>
+	    <Portable>482646</Portable>
+	</Year>
+	<Year date="2010">
+	    <Communication>44126</Communication>
+	    <Entertainment>71378</Entertainment>
+	    <VideoTV>132614</VideoTV>
+	    <Information>8436</Information>
+	    <MobileBrowsing>128302</MobileBrowsing>
+	    <Portable>1020804</Portable>
+	</Year>
+	<Year date="2011">
+	    <Communication>59341</Communication>
+	    <Entertainment>102549</Entertainment>
+	    <VideoTV>217832</VideoTV>
+	    <Information>14235</Information>
+	    <MobileBrowsing>218728</MobileBrowsing>
+	    <Portable>2063766</Portable>
+	</Year>
+	<Year date="2012">
+	    <Communication>83367</Communication>
+	    <Entertainment>152940</Entertainment>
+	    <VideoTV>355642</VideoTV>
+	    <Information>23830</Information>
+	    <MobileBrowsing>374197</MobileBrowsing>
+	    <Portable>4027969</Portable>
+	</Year>
+	<Year date="2013">
+	    <Communication>121893</Communication>
+	    <Entertainment>233308</Entertainment>
+	    <VideoTV>568685</VideoTV>
+	    <Information>39185</Information>
+	    <MobileBrowsing>638327</MobileBrowsing>
+	    <Portable>7584072</Portable>
+	</Year>
+	<Year date="2014">
+	    <Communication>2701882.12</Communication>
+	    <Entertainment>1025091.71</Entertainment>
+	    <VideoTV>6529604.88</VideoTV>
+	    <Information>4488557.83</Information>
+	    <MobileBrowsing>1511089.73</MobileBrowsing>
+	    <Portable></Portable>
+	</Year>
+</content>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<content>
+	<app name="Communication">
+	    <year name="2009">33570</year>
+	    <year name="2010">44126</year>
+	    <year name="2011">59341</year>
+	    <year name="2012">83367</year>
+	    <year name="2013">121893</year>
+	    <year name="2014">182505</year>
+	</app>
+	<app name="Entertainment">
+	    <year name="2009">50745</year>
+	    <year name="2010">71378</year>
+	    <year name="2011">102549</year>
+	    <year name="2012">152940</year>
+	    <year name="2013">233308</year>
+	    <year name="2014">354757</year>
+	</app>
+	<app name="Video/TV">
+	    <year name="2009">78254</year>
+	    <year name="2010">132614</year>
+	    <year name="2011">217832</year>
+	    <year name="2012">355642</year>
+	    <year name="2013">568685</year>
+	    <year name="2014">892472</year>
+	</app>
+	<app name="Information">
+	    <year name="2009">4891</year>
+	    <year name="2010">8436</year>
+	    <year name="2011">14235</year>
+	    <year name="2012">23830</year>
+	    <year name="2013">39185</year>
+	    <year name="2014">62597</year>
+	</app>
+	<app name="Mobile browsing">
+	    <year name="2009">73652</year>
+	    <year name="2010">128302</year>
+	    <year name="2011">218728</year>
+	    <year name="2012">374197</year>
+	    <year name="2013">638327</year>
+	    <year name="2014">1065881</year>
+	</app>
+	<app name="Portable">
+	    <year name="2009">482646</year>
+	    <year name="2010">1020804</year>
+	    <year name="2011">2063766</year>
+	    <year name="2012">4027969</year>
+	    <year name="2013">7584072</year>
+	    <year name="2014">13698014</year>
+	</app>	
+</content>
