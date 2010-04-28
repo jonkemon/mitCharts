@@ -78,6 +78,7 @@
 			}
 		private function drillDown(e:Event):void
 		{
+			model.explodingArray = [0,0,0,0,0,0];
 			newSeries = new Array();
 			newSeries.push(e.currentTarget);
 			if(model.dataState){
