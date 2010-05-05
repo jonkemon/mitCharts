@@ -209,17 +209,16 @@
 			chart.showDataTips = true;
 
 			dataSelection();
-			chart.dataProvider = medalsAC;
+			chart.dataProvider = model.refactoredPieData;
+			trace(model.refactoredPieData);
 			
 			/* Define pie series. */
 			series = new PieSeries();
 			series.nameField = "Country";
-			trace(series.nameField);
 			
 			//Below should be seriesDetail YField!
 			
-			series.field = "Gold";
-			trace(series.field);
+			series.field = "Traffic";
 			
 			series.perWedgeExplodeRadius = model.explodingArray;
 			series.setStyle("showDataEffect", interpolate);
