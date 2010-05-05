@@ -9,6 +9,7 @@
 <mx:Script>
 	<![CDATA[
 		import com.telecoms.media.charts.control.events.charts.LoadAppYearEvent;
+		import com.telecoms.media.charts.control.events.charts.LoadServiceYearEvent;
 		import com.telecoms.media.charts.model.ChartsModelLocator;
 		
 		import mx.charts.CategoryAxis;
@@ -34,26 +35,24 @@
 		public var stackedColumnChart:ColumnChart;
 		public var isoPieChart:PieChart;
 		public var newSeries:Array;
+		[Bindable]
+		public var seriesDetails:ArrayCollection = new ArrayCollection;
 		
-		private var medalsAC:ArrayCollection;
 		private var chart:PieChart;
 		private var series:PieSeries;
 		
-		/**
-		 * Create and return a simple ArrayCollection to
-		 * use as a data provider.
-		 */
-		private function getDataProvider():ArrayCollection {
-			var arr:Array = [];
-			arr.push({label:"Product 1", data:3});
-			arr.push({label:"Product 2", data:1});
-			arr.push({label:"Product 3", data:4});
-			arr.push({label:"Product 4", data:1});
-			arr.push({label:"Product 5", data:5});
-			arr.push({label:"Product 6", data:9});
-			return new ArrayCollection(arr);
+		[Bindable]
+		private var medalsAC:ArrayCollection = new ArrayCollection( [
+			{ Country: "USA", Gold: 35, Silver:39, Bronze: 29 },
+			{ Country: "China", Gold: 32, Silver:17, Bronze: 14 },
+			{ Country: "Russia", Gold: 27, Silver:27, Bronze: 38 } 
+		]);
+		
+		private function refactored():void
+		{
+			var item:Object = { Country: "Eire", Gold: 55, Silver:39, Bronze: 9 };
+			medalsAC.addItem(item);
 		}
-
 		
 		private function displayGold(data:Object, field:String, index:Number, percentValue:Number):String {
 			var temp:String= (" " + percentValue).substr(0,6);
@@ -66,29 +65,12 @@
 			var appEvent:LoadAppYearEvent=null;
 			appEvent=new LoadAppYearEvent();
 			appEvent.dispatch();
-		}
-		
-		// Exploding wedges using array data as radius amount
-		private function explodeSlice(e:ChartItemEvent):void
-			{
-				model.explodingArray = [0,0,0,0,0,0];
-				//event.target.selectedChartItem.index
-				model.explodingArray[e.hitData.chartItem.index]=0.1;
-				chart.series[0].perWedgeExplodeRadius = model.explodingArray;
-			}
-		private function drillDown(e:Event):void
-		{
-			model.explodingArray = [0,0,0,0,0,0];
-			newSeries = new Array();
-			newSeries.push(e.currentTarget);
-			if(model.dataState){
-				panelActionscript.removeChildAt(1);
-				createPieChart(e);
-			}
-			else{
-				panelActionscript.removeChildAt(1);
-				createPieChart(e);
-			}
+			
+			var serviceEvent:LoadServiceYearEvent=null;
+			serviceEvent=new LoadServiceYearEvent();
+			serviceEvent.dispatch();
+			
+			refactored();
 		}
 		private function serviceSlice():void
 		{
@@ -120,18 +102,47 @@
 			}
 		}
 		
+		private function dataSelection():void
+		{
+			if(Service.selected){
+				trace('Service Select!');
+				// if Service button selected then create data using this
+				seriesDetails = new ArrayCollection([
+					{YField:"Communication", DisplayName:"Communication"},
+					{YField:"Entertainment", DisplayName:"Entertainment"},
+					{YField:"VideoTV", DisplayName:"Video/TV"},
+					{YField:"Information", DisplayName:"Information"},
+					{YField:"MobileBrowsing", DisplayName:"Mobile Browsing"},
+					{YField:"Portable", DisplayName:"Portable"}
+				]);
+				model.convertedServiceXML = seriesDetails;
+			}
+			else if(Region.selected){
+				trace('Region selected!');
+				// if Region button selected then create data using this
+				seriesDetails = new ArrayCollection([
+					{YField:"NorthAmerica", DisplayName:"North America"},
+					{YField:"LatinAmerica", DisplayName:"Latin America"},
+					{YField:"Asia-Pacific", DisplayName:"Asia-Pacific"},
+					{YField:"Europe", DisplayName:"Europe"},
+					{YField:"Africa-MiddleEast", DisplayName:"Africa/MiddleEast"}
+				]);
+				model.convertedXML = seriesDetails;
+			}
+		}
+		
 		private function createColChart():void
 		{
 			// Create a column chart object
 			stackedColumnChart = new ColumnChart();
-			stackedColumnChart.dataProvider = model.appYearData.Year;
+			stackedColumnChart.dataProvider = model.convertedServiceXML;
 			stackedColumnChart.showDataTips = true;
 			stackedColumnChart.height   = 250;
 			stackedColumnChart.percentWidth = 100;
 			
 			// Set the horizontal axix category
 			var xAxis:CategoryAxis = new CategoryAxis();
-			xAxis.categoryField = "@date";
+			xAxis.categoryField = "date";
 			stackedColumnChart.horizontalAxis = xAxis;
 			
 			// ColumnSet.series is an array which contains
@@ -139,16 +150,8 @@
 			var columnSet:ColumnSet = new ColumnSet();
 			columnSet.type = "stacked";
 			
-			// Each item in seriesDetails becomes a different segment of
-			// a column in the stacked chart i.e. each item represents a series.
-			var seriesDetails:ArrayCollection = new ArrayCollection([
-				{YField:"Communication", DisplayName:"Communication"},
-				{YField:"Entertainment", DisplayName:"Entertainment"},
-				{YField:"VideoTV", DisplayName:"Video/TV"},
-				{YField:"Information", DisplayName:"Information"},
-				{YField:"MobileBrowsing", DisplayName:"Mobile Browsing"},
-				{YField:"Portable", DisplayName:"Portable"}
-			]);
+			// Build Data Array
+			dataSelection();
 			
 			// Create a ColumnSeries, and an array to be
 			// populated with dynamically generated columnSeries objects
@@ -161,9 +164,9 @@
 				columnSeries = new ColumnSeries();
 				columnSeries.yField = seriesDetails[i].YField;
 				columnSeries.displayName = seriesDetails[i].DisplayName;
-				columnSeries.addEventListener(MouseEvent.CLICK, drillDown);
 				seriesArray.push(columnSeries);
 			}
+			stackedColumnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
 			columnSet.series = seriesArray;
 			
 			
@@ -175,25 +178,55 @@
 			panelActionscript.addChildAt(stackedColumnChart, 1);
 		}
 		
-		private function createPieChart(e:Event):void
+		// Result of clicking on column segment
+		private function drillDown(e:ChartItemEvent):void
 		{
+			model.explodingArray = [0,0,0,0,0,0];
+
+			if(model.dataState){
+				panelActionscript.removeChildAt(1);
+				createPieChart(e);
+			}
+			else{
+				panelActionscript.removeChildAt(1);
+				createPieChart(e);
+			}
+		}
+		// Exploding wedges using array data as radius amount
+		private function explodeSlice(e:ChartItemEvent):void
+			{
+				model.explodingArray = [0,0,0,0,0,0];
+				model.explodingArray[e.hitData.chartItem.index]=0.1;
+				chart.series[0].perWedgeExplodeRadius = model.explodingArray;
+			}
+		
+		private function createPieChart(e:ChartItemEvent):void
+		{
+			/* Define pie chart. */
+			chart = new PieChart();
+			chart.percentWidth = 100;
+			chart.height = 250;
+			chart.showDataTips = true;
+
+			dataSelection();
+			chart.dataProvider = medalsAC;
+			
 			/* Define pie series. */
 			series = new PieSeries();
-			series.nameField = "@date";
-			series.field = e.currentTarget.yField;
+			series.nameField = "Country";
+			trace(series.nameField);
+			
+			//Below should be seriesDetail YField!
+			
+			series.field = "Gold";
+			trace(series.field);
+			
 			series.perWedgeExplodeRadius = model.explodingArray;
 			series.setStyle("showDataEffect", interpolate);
 			
 			/* Remove default dropshadow filter. */
 			series.filters = [];
 			
-			/* Define pie chart. */
-			chart = new PieChart();
-			chart.percentWidth = 100;
-			chart.height = 250;
-			chart.showDataTips = true;
-			
-			chart.dataProvider = model.appYearData.Year;
 			chart.series = [series];
 			
 			/* Update Legend */
@@ -202,6 +235,20 @@
 			/* Add chart to the display list. */
 			chart.addEventListener(ChartItemEvent.ITEM_CLICK, explodeSlice);
 			panelActionscript.addChildAt(chart, 1);
+		}
+
+		private function removeColItem(legendItem:int):void
+		{
+			//trace(legendItem);
+			model.convertedXML[3].NorthAmerica = 0;
+			ColumnChart1.dataProvider = model.convertedXML;
+			cs1.alpha = 0;
+		}
+		
+		// Define the event handler.
+		public function hitDataListener(e:ChartItemEvent):void {
+			trace(e.hitData.item.date);
+			trace(e.hitData.x + "/" + e.hitData.y);
 		}
 	]]>
 </mx:Script>	
@@ -224,45 +271,27 @@
 	
 <mx:VBox>
 	<mx:Panel width="600" title="Mobile Internet Traffic" id="panelActionscript"  horizontalAlign="center">
-		<!--<mx:HBox width="100%" height="100%" horizontalAlign="left">
-			<mx:Legend dataProvider="{pieChart}" width="150" height="100%" paddingTop="30" paddingLeft="30" markerWidth="50"/>
-			<mx:PieChart
-				id="pieChart"
-				dataProvider="{model.appYearData.Year}"
-				showDataTips="true"
-				width="300" 
-				height="300" selectionMode="single" itemClick="explodeSlice(event)"
-				>
-					<mx:series>
-						<mx:PieSeries
-							dataProvider="{model.appYearData.Year}"
-							field="NorthAmerica"
-							nameField="@date"
-							perWedgeExplodeRadius="{model.explodingArray}"
-							showDataEffect="interpolate"
-							/>
-					</mx:series>
-			</mx:PieChart>
-		</mx:HBox>-->	
-
 		<mx:Legend id="legend1" dataProvider="{ColumnChart1}" width="100%" height="30" paddingLeft="30" horizontalGap="6"/>
 		
 		<mx:ColumnChart id="ColumnChart1" height="250" width="100%"
 					  paddingLeft="5" paddingRight="5" type="stacked" 
-					  showDataTips="true" dataProvider="{model.appYearData.Year}">
+					  showDataTips="true" dataProvider="{model.convertedXML}" itemClick="{drillDown(event)}">
+			<mx:horizontalAxis>
+				<mx:CategoryAxis categoryField="date" displayName="date"/>
+			</mx:horizontalAxis>
 			
 			<mx:series>
-				<mx:ColumnSeries id="cs1" yField="NorthAmerica" xField="@date" displayName="North America" click="drillDown(event)"/>
-				<mx:ColumnSeries id="cs2" yField="LatinAmerica" xField="@date" displayName="Latin America" click="drillDown(event)"/>
-				<mx:ColumnSeries id="cs3" yField="Asia-Pacific" xField="@date" displayName="Asia-Pacific" click="drillDown(event)"/>
-				<mx:ColumnSeries id="cs4" yField="Europe" xField="@date" displayName="Europe" click="drillDown(event)"/>
-				<mx:ColumnSeries id="cs5" yField="Africa-MiddleEast" xField="@date" displayName="Africa/Middle-East" click="drillDown(event)"/>
+				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" />
+				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" />
+				<mx:ColumnSeries id="cs3" yField="Asia-Pacific" displayName="Asia-Pacific" />
+				<mx:ColumnSeries id="cs4" yField="Europe" displayName="Europe" />
+				<mx:ColumnSeries id="cs5" yField="Africa-MiddleEast" displayName="Africa/Middle-East" />
 			</mx:series>
 		</mx:ColumnChart>
 
 		<mx:HBox paddingLeft="460" paddingBottom="4">
-			<s:RadioButton label="Region" click="stateSelect();" selected="true"/>
-			<s:RadioButton label="Service" click="stateSelect();"/>
+			<s:RadioButton id="Region" label="Region" click="stateSelect();" selected="true"/>
+			<s:RadioButton id="Service" label="Service" click="stateSelect();"/>
 		</mx:HBox>
 	</mx:Panel>
 

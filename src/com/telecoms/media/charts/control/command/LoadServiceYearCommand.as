@@ -2,7 +2,7 @@ package com.telecoms.media.charts.control.command
 {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
-	import com.telecoms.media.charts.control.delegates.LoadAppYearDelegate;
+	import com.telecoms.media.charts.control.delegates.LoadServiceYearDelegate;
 	import com.telecoms.media.charts.model.ChartsModelLocator;
 	
 	import flash.external.ExternalInterface;
@@ -16,14 +16,14 @@ package com.telecoms.media.charts.control.command
 	import mx.rpc.xml.SimpleXMLDecoder;
 	import mx.utils.ArrayUtil;
 
-	public class LoadAppYearCommand implements ICommand
+	public class LoadServiceYearCommand implements ICommand
 	{		
 		private var model:ChartsModelLocator = ChartsModelLocator.getInstance();
 		private	var c:int = 0;
 		public function execute(event:CairngormEvent):void
 		{
 			var responder:Responder = new Responder(onResults,onFault);
-			var delegate:LoadAppYearDelegate = new LoadAppYearDelegate(responder);
+			var delegate:LoadServiceYearDelegate = new LoadServiceYearDelegate(responder);
 			delegate.loadPhotos();
 		}
 		private function onFault(event:FaultEvent):void
@@ -32,26 +32,9 @@ package com.telecoms.media.charts.control.command
 		}
 		private function onResults(event:ResultEvent):void
 		{
-			model.appYearData = event.token.result as XML;
-			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
-			
-			trace(model.appYearData.Year.length);
-			pieRefactoring();
+			model.serviceYearData = event.token.result as XML;
+			model.convertedServiceXML = convertXmlToArrayCollection(model.serviceYearData);
 		}
-		private function pieRefactoring():void
-		{
-				if(c<5){
-					for(var i:int = 0; i < 5; i++){
-						var item:Object = { Year: "{model.appYearData.Year[c].@date}", Country: "{model.appYearData.Year[c].child(i).name()}", Traffic: "{model.appYearData.Year[c].child(i)}" };
-					}
-					c++;
-					pieRefactoring();
-				}
-				else{
-					trace('done');
-				}
-		}
-		
 		private function convertXmlToArrayCollection( file:String ):ArrayCollection
 		{
 		    var xml:XMLDocument = new XMLDocument( file );

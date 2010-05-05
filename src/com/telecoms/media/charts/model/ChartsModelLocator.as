@@ -7,8 +7,12 @@ package com.telecoms.media.charts.model
 	{
 		static public var __instance:ChartsModelLocator=null;
 		public var appYearData:XML = new XML;
+		public var serviceYearData:XML = new XML;
 		public var dataState:Boolean = true;
+		public var convertedXML:ArrayCollection = new ArrayCollection;
+		public var convertedServiceXML:ArrayCollection = new ArrayCollection;
 		public var explodingArray:Array = [0,0,0,0,0,0];
+		public var refactoredPieData:ArrayCollection = new ArrayCollection;
 		static public function getInstance():ChartsModelLocator
 		{
 			if(__instance == null)
