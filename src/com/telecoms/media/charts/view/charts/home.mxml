@@ -110,7 +110,6 @@
 			stackedColumnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
 			columnSet.series = seriesArray;
 			
-			
 			// c.series could take an array of column sets
 			// for displaying mixed charts i.e. c.series = [columnSet1, columnSet2];
 			stackedColumnChart.series = [columnSet];
