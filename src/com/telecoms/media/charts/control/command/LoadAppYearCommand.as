@@ -19,7 +19,6 @@ package com.telecoms.media.charts.control.command
 	public class LoadAppYearCommand implements ICommand
 	{		
 		private var model:ChartsModelLocator = ChartsModelLocator.getInstance();
-		private	var c:int = 0;
 		public function execute(event:CairngormEvent):void
 		{
 			var responder:Responder = new Responder(onResults,onFault);
@@ -34,25 +33,7 @@ package com.telecoms.media.charts.control.command
 		{
 			model.appYearData = event.token.result as XML;
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
-			
-			trace(model.appYearData.Year.(@date == 2009).children().length());
-			pieRefactoring();
-		}
-		private function pieRefactoring():void
-		{
-				if(c<model.appYearData.Year.length()){
-					for(var i:int = 0; i < model.appYearData.Year.(@date == 2009).children().length(); i++){
-						var item:Object = { Year: model.appYearData.Year[c].@date, Country: model.appYearData.Year[c].child(i).name(), Traffic: model.appYearData.Year[c].child(i)};
-						model.refactoredPieData.addItem(item);
-					}
-					c++;
-					pieRefactoring();
-				}
-				else{
-					trace('done');
-				}
-		}
-		
+		}		
 		private function convertXmlToArrayCollection( file:String ):ArrayCollection
 		{
 		    var xml:XMLDocument = new XMLDocument( file );

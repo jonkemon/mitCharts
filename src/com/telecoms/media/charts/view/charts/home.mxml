@@ -27,38 +27,16 @@
 		
 		[Bindable]
 		public var model:ChartsModelLocator = ChartsModelLocator.getInstance();
-		private var tween:Tween;
-		private var itemIndex:int = 0;
-		private var totalImages:int = -3;
 		public var serviceArray:Array = new Array;
 		public var serviceColumn:ColumnSeries = new ColumnSeries;
 		public var stackedColumnChart:ColumnChart;
-		public var isoPieChart:PieChart;
-		public var newSeries:Array;
 		[Bindable]
 		public var seriesDetails:ArrayCollection = new ArrayCollection;
 		
 		private var chart:PieChart;
 		private var series:PieSeries;
-		
-		[Bindable]
-		private var medalsAC:ArrayCollection = new ArrayCollection( [
-			{ Country: "USA", Gold: 35, Silver:39, Bronze: 29 },
-			{ Country: "China", Gold: 32, Silver:17, Bronze: 14 },
-			{ Country: "Russia", Gold: 27, Silver:27, Bronze: 38 } 
-		]);
-		
-		private function refactored():void
-		{
-			var item:Object = { Country: "Eire", Gold: 55, Silver:39, Bronze: 9 };
-			medalsAC.addItem(item);
-		}
-		
-		private function displayGold(data:Object, field:String, index:Number, percentValue:Number):String {
-			var temp:String= (" " + percentValue).substr(0,6);
-			return data.app + ": " + '\n' + "Total Gold: " + data.year + '\n' + temp + "%";
-		}
-		
+		private	var c:int = 0;
+
 		// Load Image data
 		public function loadXML():void
 		{
@@ -69,24 +47,8 @@
 			var serviceEvent:LoadServiceYearEvent=null;
 			serviceEvent=new LoadServiceYearEvent();
 			serviceEvent.dispatch();
-			
-			refactored();
 		}
-		private function serviceSlice():void
-		{
-			
-			serviceColumn.xField = model.appYearData.Year.@date;
-			for(var i:int = 0; i < 6; i++){
-			serviceColumn = new ColumnSeries;
-			serviceColumn.yField = model.appYearData.Year[i].Communication;
-			trace(serviceColumn.yField);
-			serviceColumn.displayName = 'Communication';
-			serviceArray.push(serviceColumn);
-			}
-			//ColumnChart.series = serviceArray;
-			trace(serviceArray);
-		}
-		
+	
 		private function stateSelect():void
 		{
 			if(model.dataState){
@@ -101,36 +63,6 @@
 				legend1.dataProvider = ColumnChart1;
 			}
 		}
-		
-		private function dataSelection():void
-		{
-			if(Service.selected){
-				trace('Service Select!');
-				// if Service button selected then create data using this
-				seriesDetails = new ArrayCollection([
-					{YField:"Communication", DisplayName:"Communication"},
-					{YField:"Entertainment", DisplayName:"Entertainment"},
-					{YField:"VideoTV", DisplayName:"Video/TV"},
-					{YField:"Information", DisplayName:"Information"},
-					{YField:"MobileBrowsing", DisplayName:"Mobile Browsing"},
-					{YField:"Portable", DisplayName:"Portable"}
-				]);
-				model.convertedServiceXML = seriesDetails;
-			}
-			else if(Region.selected){
-				trace('Region selected!');
-				// if Region button selected then create data using this
-				seriesDetails = new ArrayCollection([
-					{YField:"NorthAmerica", DisplayName:"North America"},
-					{YField:"LatinAmerica", DisplayName:"Latin America"},
-					{YField:"Asia-Pacific", DisplayName:"Asia-Pacific"},
-					{YField:"Europe", DisplayName:"Europe"},
-					{YField:"Africa-MiddleEast", DisplayName:"Africa/MiddleEast"}
-				]);
-				model.convertedXML = seriesDetails;
-			}
-		}
-		
 		private function createColChart():void
 		{
 			// Create a column chart object
@@ -151,7 +83,14 @@
 			columnSet.type = "stacked";
 			
 			// Build Data Array
-			dataSelection();
+			seriesDetails = new ArrayCollection([
+				{YField:"Communication", DisplayName:"Communication"},
+				{YField:"Entertainment", DisplayName:"Entertainment"},
+				{YField:"VideoTV", DisplayName:"Video/TV"},
+				{YField:"Information", DisplayName:"Information"},
+				{YField:"MobileBrowsing", DisplayName:"Mobile Browsing"},
+				{YField:"Portable", DisplayName:"Portable"}
+			]);
 			
 			// Create a ColumnSeries, and an array to be
 			// populated with dynamically generated columnSeries objects
@@ -192,32 +131,30 @@
 				createPieChart(e);
 			}
 		}
+		
 		// Exploding wedges using array data as radius amount
 		private function explodeSlice(e:ChartItemEvent):void
-			{
+		{
 				model.explodingArray = [0,0,0,0,0,0];
 				model.explodingArray[e.hitData.chartItem.index]=0.1;
 				chart.series[0].perWedgeExplodeRadius = model.explodingArray;
-			}
+		}
 		
 		private function createPieChart(e:ChartItemEvent):void
 		{
+			pieRefactoring(e);
+			
 			/* Define pie chart. */
 			chart = new PieChart();
 			chart.percentWidth = 100;
 			chart.height = 250;
 			chart.showDataTips = true;
 
-			dataSelection();
 			chart.dataProvider = model.refactoredPieData;
-			trace(model.refactoredPieData);
 			
 			/* Define pie series. */
 			series = new PieSeries();
-			series.nameField = "Country";
-			
-			//Below should be seriesDetail YField!
-			
+			series.nameField = "Country";			
 			series.field = "Traffic";
 			
 			series.perWedgeExplodeRadius = model.explodingArray;
@@ -243,11 +180,36 @@
 			ColumnChart1.dataProvider = model.convertedXML;
 			cs1.alpha = 0;
 		}
-		
-		// Define the event handler.
-		public function hitDataListener(e:ChartItemEvent):void {
-			trace(e.hitData.item.date);
-			trace(e.hitData.x + "/" + e.hitData.y);
+		private function pieRefactoring(e:ChartItemEvent):void
+		{
+			if (model.dataState=='false'){
+				pieServiceRefactoring(e);
+			}
+			else if(model.dataState){
+				pieRegionRefactoring(e);
+			}
+		}
+		private function pieServiceRefactoring(e:ChartItemEvent):void
+		{
+			var yearValue:int = e.hitData.item.date;
+			var dataLength:int = model.serviceYearData.Year.(@date == yearValue).children().length();
+			model.refactoredPieData.removeAll();
+			
+			for(var i:int = 0; i < dataLength ; i++){
+				var item:Object = { Year: yearValue, Country: model.serviceYearData.Year.(@date == yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == yearValue).child(i)};
+				model.refactoredPieData.addItem(item);
+			}
+		}
+		private function pieRegionRefactoring(e:ChartItemEvent):void
+		{
+			var yearValue:int = e.hitData.item.date;
+			var dataLength:int = model.appYearData.Year.(@date == yearValue).children().length();
+			model.refactoredPieData.removeAll();
+			
+			for(var i:int = 0; i < dataLength ; i++){
+				var item:Object = { Year: yearValue, Country: model.appYearData.Year.(@date == yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == yearValue).child(i)};
+				model.refactoredPieData.addItem(item);
+			}
 		}
 	]]>
 </mx:Script>	
@@ -288,9 +250,9 @@
 			</mx:series>
 		</mx:ColumnChart>
 
-		<mx:HBox paddingLeft="460" paddingBottom="4">
-			<s:RadioButton id="Region" label="Region" click="stateSelect();" selected="true"/>
-			<s:RadioButton id="Service" label="Service" click="stateSelect();"/>
+		<mx:HBox paddingLeft="435" paddingBottom="4">
+			<s:Button id="Region" label="Region" click="{model.dataState=false;}stateSelect();"  />
+			<s:Button id="Service" label="Service" click="{model.dataState=true;}stateSelect();" />
 		</mx:HBox>
 	</mx:Panel>
 
