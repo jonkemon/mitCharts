@@ -103,6 +103,8 @@
 				columnSeries = new ColumnSeries();
 				columnSeries.yField = seriesDetails[i].YField;
 				columnSeries.displayName = seriesDetails[i].DisplayName;
+				columnSeries.setStyle("showDataEffect", slideIn);
+				columnSeries.setStyle("hideDataEffect", slideOut);
 				seriesArray.push(columnSeries);
 			}
 			stackedColumnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
@@ -121,15 +123,8 @@
 		private function drillDown(e:ChartItemEvent):void
 		{
 			model.explodingArray = [0,0,0,0,0,0];
-
-			if(model.dataState){
-				panelActionscript.removeChildAt(1);
-				createPieChart(e);
-			}
-			else{
-				panelActionscript.removeChildAt(1);
-				createPieChart(e);
-			}
+			panelActionscript.removeChildAt(1);
+			createPieChart(e);
 		}
 		
 		// Exploding wedges using array data as radius amount
@@ -182,11 +177,11 @@
 		}
 		private function pieRefactoring(e:ChartItemEvent):void
 		{
-			if (model.dataState=='false'){
-				pieServiceRefactoring(e);
-			}
-			else if(model.dataState){
+			if(model.dataState){
 				pieRegionRefactoring(e);
+			}
+			else{
+				pieServiceRefactoring(e);
 			}
 		}
 		private function pieServiceRefactoring(e:ChartItemEvent):void
@@ -211,6 +206,15 @@
 				model.refactoredPieData.addItem(item);
 			}
 		}
+		private function removeData():void
+		{
+			if (model.dataState=='false'){
+				model.convertedServiceXML.removeItemAt(2);
+			}
+			else if(model.dataState){
+				model.convertedXML.removeItemAt(2);
+			}
+		}
 	]]>
 </mx:Script>	
 	
@@ -228,6 +232,9 @@
 	<mx:Stroke id = "s4" color="black" weight="2"/>
 	<mx:Stroke id = "s5" color="yellow" weight="2"/>
 	
+	<mx:SeriesSlide id="slideIn" duration="1000" direction="up"/>
+	<mx:SeriesSlide id="slideOut" duration="1000" direction="down"/>
+	
 	<mx:SeriesInterpolate id="interpolate" duration="1000"/>
 	
 <mx:VBox>
@@ -235,22 +242,23 @@
 		<mx:Legend id="legend1" dataProvider="{ColumnChart1}" width="100%" height="30" paddingLeft="30" horizontalGap="6"/>
 		
 		<mx:ColumnChart id="ColumnChart1" height="250" width="100%"
-					  paddingLeft="5" paddingRight="5" type="stacked" 
-					  showDataTips="true" dataProvider="{model.convertedXML}" itemClick="{drillDown(event)}">
+					  paddingLeft="5" paddingRight="5" type="stacked"
+					  showDataTips="true" dataProvider="{model.convertedXML}" itemClick="{drillDown(event)}" >
 			<mx:horizontalAxis>
 				<mx:CategoryAxis categoryField="date" displayName="date"/>
 			</mx:horizontalAxis>
 			
 			<mx:series>
-				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" />
-				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" />
-				<mx:ColumnSeries id="cs3" yField="Asia-Pacific" displayName="Asia-Pacific" />
-				<mx:ColumnSeries id="cs4" yField="Europe" displayName="Europe" />
-				<mx:ColumnSeries id="cs5" yField="Africa-MiddleEast" displayName="Africa/Middle-East" />
+				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" showDataEffect="slideIn" hideDataEffect="slideOut"/>
+				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs3" yField="Asia-Pacific" displayName="Asia-Pacific" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs4" yField="Europe" displayName="Europe" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs5" yField="Africa-MiddleEast" displayName="Africa/Middle-East" showDataEffect="slideIn" hideDataEffect="slideOut" />
 			</mx:series>
 		</mx:ColumnChart>
 
-		<mx:HBox paddingLeft="435" paddingBottom="4">
+		<mx:HBox paddingLeft="335" paddingBottom="4">
+			<s:Button id="TakeAway" label="Take Away" click="removeData();" />
 			<s:Button id="Region" label="Region" click="{model.dataState=false;}stateSelect();"  />
 			<s:Button id="Service" label="Service" click="{model.dataState=true;}stateSelect();" />
 		</mx:HBox>
