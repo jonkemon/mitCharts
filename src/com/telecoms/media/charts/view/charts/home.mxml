@@ -4,10 +4,11 @@
 		horizontalScrollPolicy="off" 
 		verticalScrollPolicy="off"
 		y="0" 
-		autoLayout="false" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:s="library://ns.adobe.com/flex/spark"
+		autoLayout="false" xmlns:mx1="library://ns.adobe.com/flex/mx" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:charts="com.telecoms.media.charts.view.charts.*"
 		>
 <mx:Script>
 	<![CDATA[
+		import com.telecoms.media.charts.control.events.charts.CheckBoxLegendItemChangedEvent;
 		import com.telecoms.media.charts.control.events.charts.LoadAppYearEvent;
 		import com.telecoms.media.charts.control.events.charts.LoadServiceYearEvent;
 		import com.telecoms.media.charts.model.ChartsModelLocator;
@@ -22,6 +23,7 @@
 		import mx.charts.series.ColumnSet;
 		import mx.charts.series.PieSeries;
 		import mx.collections.ArrayCollection;
+		import mx.controls.CheckBox;
 		import mx.effects.Tween;
 		import mx.events.ListEvent;
 		
@@ -29,11 +31,8 @@
 		public var model:ChartsModelLocator = ChartsModelLocator.getInstance();
 		public var serviceArray:Array = new Array;
 		public var serviceColumn:ColumnSeries = new ColumnSeries;
-		public var stackedColumnChart:ColumnChart;
 		[Bindable]
 		public var seriesDetails:ArrayCollection = new ArrayCollection;
-		
-		private var chart:PieChart;
 		private var series:PieSeries;
 		private	var c:int = 0;
 
@@ -66,16 +65,16 @@
 		private function createColChart():void
 		{
 			// Create a column chart object
-			stackedColumnChart = new ColumnChart();
-			stackedColumnChart.dataProvider = model.convertedServiceXML;
-			stackedColumnChart.showDataTips = true;
-			stackedColumnChart.height   = 250;
-			stackedColumnChart.percentWidth = 100;
+			model.stackedColumnChart = new ColumnChart();
+			model.stackedColumnChart.dataProvider = model.convertedServiceXML;
+			model.stackedColumnChart.showDataTips = true;
+			model.stackedColumnChart.height   = 250;
+			model.stackedColumnChart.percentWidth = 100;
 			
 			// Set the horizontal axix category
 			var xAxis:CategoryAxis = new CategoryAxis();
 			xAxis.categoryField = "date";
-			stackedColumnChart.horizontalAxis = xAxis;
+			model.stackedColumnChart.horizontalAxis = xAxis;
 			
 			// ColumnSet.series is an array which contains
 			// an array of ColumnSeries objects.
@@ -107,15 +106,15 @@
 				columnSeries.setStyle("hideDataEffect", slideOut);
 				seriesArray.push(columnSeries);
 			}
-			stackedColumnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+			model.stackedColumnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
 			columnSet.series = seriesArray;
 			
 			// c.series could take an array of column sets
 			// for displaying mixed charts i.e. c.series = [columnSet1, columnSet2];
-			stackedColumnChart.series = [columnSet];
+			model.stackedColumnChart.series = [columnSet];
 			
-			legend1.dataProvider = stackedColumnChart;
-			panelActionscript.addChildAt(stackedColumnChart, 1);
+			legend1.dataProvider = model.stackedColumnChart;
+			panelActionscript.addChildAt(model.stackedColumnChart, 1);
 		}
 		
 		// Result of clicking on column segment
@@ -131,7 +130,7 @@
 		{
 				model.explodingArray = [0,0,0,0,0,0];
 				model.explodingArray[e.hitData.chartItem.index]=0.1;
-				chart.series[0].perWedgeExplodeRadius = model.explodingArray;
+				model.chart.series[0].perWedgeExplodeRadius = model.explodingArray;
 		}
 		
 		private function createPieChart(e:ChartItemEvent):void
@@ -139,12 +138,12 @@
 			pieRefactoring(e);
 			
 			/* Define pie chart. */
-			chart = new PieChart();
-			chart.percentWidth = 100;
-			chart.height = 250;
-			chart.showDataTips = true;
+			model.chart = new PieChart();
+			model.chart.percentWidth = 100;
+			model.chart.height = 250;
+			model.chart.showDataTips = true;
 
-			chart.dataProvider = model.refactoredPieData;
+			model.chart.dataProvider = model.refactoredPieData;
 			
 			/* Define pie series. */
 			series = new PieSeries();
@@ -157,14 +156,16 @@
 			/* Remove default dropshadow filter. */
 			series.filters = [];
 			
-			chart.series = [series];
+			model.chart.series = [series];
 			
 			/* Update Legend */
-			legend1.dataProvider = chart;
+			legend1.dataProvider = model.chart;
 			
-			/* Add chart to the display list. */
-			chart.addEventListener(ChartItemEvent.ITEM_CLICK, explodeSlice);
-			panelActionscript.addChildAt(chart, 1);
+			// Add onClick event to wedges
+			model.chart.addEventListener(ChartItemEvent.ITEM_CLICK, explodeSlice);
+						
+			/* Add chart and buttons to the display list. */
+			panelActionscript.addChildAt(model.chart, 1);
 		}
 
 		private function removeColItem(legendItem:int):void
@@ -207,13 +208,20 @@
 		}
 		private function removeData():void
 		{
-			if (model.dataState=='false'){
-				model.convertedServiceXML.removeItemAt(2);
-			}
-			else if(model.dataState){
+			if(model.dataState){
 				model.convertedXML.removeItemAt(2);
 			}
+			else {
+				model.convertedServiceXML.removeItemAt(2);
+				model.stackedColumnChart.dataProvider = model.convertedServiceXML;
+			}
 		}
+		private function legendItemChanged(event:CheckBoxLegendItemChangedEvent):void {
+			var txt:String = "legendItemChanged: " + event.legendItem.label +
+				" [" + (event.legendItemSelected ? "selected]" : "not selected]");
+			trace(event.legendItem.label);
+		}
+
 	]]>
 </mx:Script>	
 	
@@ -235,11 +243,12 @@
 	<mx:SeriesSlide id="slideOut" duration="1000" direction="down"/>
 	
 	<mx:SeriesInterpolate id="interpolate" duration="1000"/>
-	
+
 <mx:VBox>
 	<mx:Panel width="600" title="Mobile Internet Traffic" id="panelActionscript"  horizontalAlign="center">
-		<mx:Legend id="legend1" dataProvider="{ColumnChart1}" width="100%" height="30" paddingLeft="30" horizontalGap="6"/>
-		
+		<charts:CheckBoxLegend id="legend1" dataProvider="{ColumnChart1}" width="100%" height="30" 
+							   paddingLeft="30" horizontalGap="6" change="legendItemChanged(event)" />
+
 		<mx:ColumnChart id="ColumnChart1" height="250" width="100%"
 					  paddingLeft="5" paddingRight="5" type="stacked"
 					  showDataTips="true" dataProvider="{model.convertedXML}" itemClick="{drillDown(event)}" >

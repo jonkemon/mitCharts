@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:LegendItem xmlns:mx="http://www.adobe.com/2006/mxml" 
+			   click="legendItemClicked(event)" paddingLeft="20">
+	
+	<!--
+	This LegendItem adds a CheckBox on the left of the legend item.
+	When the CheckBox is selected it fires a Event.CHANGE event which is
+	handled by the CheckBoxLegend component.
+	Clicking on the LegendItem (beside the CheckBox) also toggles the CheckBox. 
+	-->
+	
+	<mx:Metadata>
+		[Event(name="change", type="flash.events.Event")]
+	</mx:Metadata>
+	
+	<mx:Script>
+		<![CDATA[
+			import com.telecoms.media.charts.control.events.charts.LoadAppYearEvent;
+			import com.telecoms.media.charts.model.ChartsModelLocator;
+			import com.telecoms.media.charts.view.charts.home;
+			import com.telecoms.media.charts.control.events.charts.CheckBoxEvent;
+			
+			import mx.controls.CheckBox;
+			
+			private var _checkbox:CheckBox;
+			
+			[Bindable]
+			public var model:ChartsModelLocator = ChartsModelLocator.getInstance();
+			
+			public function get checkbox():CheckBox {
+				if (_checkbox == null) {
+					_checkbox = new CheckBox();
+					// select the item by default
+					_checkbox.selected = true;
+					_checkbox.addEventListener(MouseEvent.CLICK, checkboxClicked);
+					_checkbox.addEventListener(Event.CHANGE, checkboxChanged);
+				}
+				return _checkbox;
+			}
+			
+			public function get selected():Boolean {
+				return checkbox.selected;
+			}
+			
+			public function set selected(value:Boolean):void {
+				checkbox.selected = value;
+			}
+			
+			public function setSelected(value:Boolean, fireEvent:Boolean = true):void {
+				checkbox.selected = value;
+				if (fireEvent) {
+					dispatchEvent(new Event(Event.CHANGE));
+				}
+			}
+			
+			override protected function createChildren():void {
+				super.createChildren();
+				// add the checkbox last
+				addChild(checkbox);
+			}
+			
+			override protected function updateDisplayList(w:Number, h:Number):void {
+				super.updateDisplayList(w, h);
+				
+				// align vertical center
+				var cby:Number = Math.max(0, (h - checkbox.height) / 2);
+				if (cby != checkbox.y) {
+					checkbox.y = cby;
+				}
+				
+				// fill in a transparent background so that the mouse events
+				// work properly, otherwise there is a gap between the checkbox and the legend item
+				var g:Graphics = graphics;
+				g.clear();
+				g.beginFill(0xffffff, 0);
+				g.drawRect(0, 0, w, h);
+				g.endFill();
+			}
+			
+			private function legendItemClicked(event:MouseEvent):void {
+				// doesn't fire a CHANGE event, so we'll do it manually
+				checkbox.selected = !checkbox.selected;
+				checkbox.dispatchEvent(new Event(Event.CHANGE));
+			}
+			
+			private function checkboxClicked(event:MouseEvent):void {
+				// don't propagate this event up to the parent LegendItem
+
+				//checkbox.selected = !checkbox.selected;
+				checkbox.dispatchEvent(new Event(Event.CHANGE));
+
+				var checkBoxEvent:CheckBoxEvent=null;
+				checkBoxEvent=new CheckBoxEvent();
+				checkBoxEvent.dispatch();
+				
+				event.stopPropagation();
+			}
+			
+			private function checkboxChanged(event:Event):void {
+				dispatchEvent(event.clone());
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:LegendItem>
