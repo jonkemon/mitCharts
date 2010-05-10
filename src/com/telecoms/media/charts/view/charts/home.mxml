@@ -219,11 +219,23 @@
 		private function legendItemChanged(event:CheckBoxLegendItemChangedEvent):void {
 			var txt:String = "legendItemChanged: " + event.legendItem.label +
 				" [" + (event.legendItemSelected ? "selected]" : "not selected]");
-			model.tempCheckBoxData = stripSpaces(event.legendItem.label);
+			var refactorString:String = stripSpaces(event.legendItem.label);
+			model.tempCheckBoxData = stripHyphen(stripSlashes(refactorString));
 		}
 		private function stripSpaces(originalString:String):String
 		{
 			var original:Array = originalString.split(" ");
+			return (original.join(""));
+		}
+		private function stripSlashes(originalString:String):String
+		{
+			var original:Array = originalString.split("/");
+			return (original.join(""));
+		}
+		private function stripHyphen(originalString:String):String
+		{
+			var original:Array = originalString.split("-");
+			trace(original.join(""));
 			return (original.join(""));
 		}
 
@@ -264,9 +276,9 @@
 			<mx:series>
 				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" showDataEffect="slideIn" hideDataEffect="slideOut"/>
 				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs3" yField="Asia-Pacific" displayName="Asia-Pacific" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs3" yField="AsiaPacific" displayName="Asia-Pacific" showDataEffect="slideIn" hideDataEffect="slideOut" />
 				<mx:ColumnSeries id="cs4" yField="Europe" displayName="Europe" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs5" yField="Africa-MiddleEast" displayName="Africa/Middle-East" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs5" yField="AfricaMiddleEast" displayName="Africa/Middle-East" showDataEffect="slideIn" hideDataEffect="slideOut" />
 			</mx:series>
 		</mx:ColumnChart>
 
