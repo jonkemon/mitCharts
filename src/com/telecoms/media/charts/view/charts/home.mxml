@@ -219,7 +219,12 @@
 		private function legendItemChanged(event:CheckBoxLegendItemChangedEvent):void {
 			var txt:String = "legendItemChanged: " + event.legendItem.label +
 				" [" + (event.legendItemSelected ? "selected]" : "not selected]");
-			trace(event.legendItem.label);
+			model.tempCheckBoxData = stripSpaces(event.legendItem.label);
+		}
+		private function stripSpaces(originalString:String):String
+		{
+			var original:Array = originalString.split(" ");
+			return (original.join(""));
 		}
 
 	]]>

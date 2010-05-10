@@ -16,6 +16,8 @@ package com.telecoms.media.charts.model
 		public var convertedServiceXML:ArrayCollection = new ArrayCollection;
 		public var explodingArray:Array = [0,0,0,0,0,0];
 		public var refactoredPieData:ArrayCollection = new ArrayCollection;
+		public var tempCheckBoxData:String;
+		public var storedKeyData:Array = [0,0,0,0,0,0];
 		
 		public var stackedColumnChart:ColumnChart = new ColumnChart;
 		public var chart:PieChart = new PieChart;

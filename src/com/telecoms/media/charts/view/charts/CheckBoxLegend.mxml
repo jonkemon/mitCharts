@@ -67,7 +67,8 @@
 					// but all the other series are re-colored and the legend is updated
 					// and we lose our unchecked item, so instead we simply toggle 
 					// the visibility value of the series to hide it
-					series.visible = legendItem.selected;
+					
+					//series.visible = legendItem.selected;
 					
 					// if you wanted to remove the series AND the CheckBoxLegendItem
 					//                    var chart:ChartBase = (dataProvider as ChartBase);
