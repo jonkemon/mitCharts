@@ -29,8 +29,8 @@ package com.telecoms.media.charts.control.command
 			var tempXMLNode:XMLNode = new XMLNode(1, tempRegionService);
 			//tempXMLNode.nodeName = tempRegionService;
 
-			//trace(model.appYearData.Year[i].child.name("NorthAmerica"));
 			for(var i:int = 0; i<model.appYearData.Year.length(); i++){
+				trace(model.appYearData.Year[i].child(tempRegionService));
 				model.appYearData.Year[i].replace(tempRegionService, empty);
 			}
 			model.appYearData.normalize();
