@@ -41,10 +41,13 @@ package com.telecoms.media.charts.control.command
 			
 			var tempName:XML = tempRegionService as XML;
 			//trace(model.appYearData.childIndex());
-			var item:Object = { Country: model.serviceYearData.Year[0].child(0).name(), Traffic: model.serviceYearData.Year[0].child(0)};
-			
+			trace(model.appYearData.Year.length());
+			for(var m:int = 0; m < model.appYearData.Year.length(); m++){
+				var item:Object = { Country: tempRegionService};
+				model.storedKeyData.addItem(item);
+			}
+			trace('Country is '+model.storedKeyData[0].Country);
 			//var item:Object = { Country: tempRegionService};
-			model.storedKeyData.addItem(item);
 			
 			model.storedKeys.push(tempRegionService);
 
