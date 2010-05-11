@@ -69,7 +69,8 @@
 					// the visibility value of the series to hide it
 					
 					//series.visible = legendItem.selected;
-					trace(legendItem.selected);
+					
+					//trace(legendItem.selected);
 					
 					// if you wanted to remove the series AND the CheckBoxLegendItem
 					//                    var chart:ChartBase = (dataProvider as ChartBase);

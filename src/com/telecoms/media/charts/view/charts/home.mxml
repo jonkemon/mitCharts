@@ -235,7 +235,6 @@
 		private function stripHyphen(originalString:String):String
 		{
 			var original:Array = originalString.split("-");
-			trace(original.join(""));
 			return (original.join(""));
 		}
 

@@ -24,20 +24,64 @@ package com.telecoms.media.charts.control.command
 		private var model:ChartsModelLocator = ChartsModelLocator.getInstance();
 		public function execute(event:CairngormEvent):void
 		{
+			model.tempRegionService = model.tempCheckBoxData;
+
+			if(model.storedKeys.indexOf(model.tempRegionService)>0){
+					restoreTakenData();
+			}
+			else{					
+				takeData();
+			}
+		}
+		
+		private function takeData():void
+		{
 			var tempRegionService:String = model.tempCheckBoxData;
 			var empty:String = "";
-			var tempXMLNode:XMLNode = new XMLNode(1, tempRegionService);
-			//tempXMLNode.nodeName = tempRegionService;
+			
+			var tempName:XML = tempRegionService as XML;
+			//trace(model.appYearData.childIndex());
+			var item:Object = { Country: model.serviceYearData.Year[0].child(0).name(), Traffic: model.serviceYearData.Year[0].child(0)};
+			
+			//var item:Object = { Country: tempRegionService};
+			model.storedKeyData.addItem(item);
+			
+			model.storedKeys.push(tempRegionService);
 
-			for(var i:int = 0; i<model.appYearData.Year.length(); i++){
-				trace(model.appYearData.Year[i].child(tempRegionService));
-				model.appYearData.Year[i].replace(tempRegionService, empty);
+			//trace('Result = '+model.storedKeyData[0].Country);
+			
+			for(var j:int = 0; j<model.appYearData.Year.length(); j++){
+				//trace(model.appYearData.Year[j].child(tempRegionService));
+				model.appYearData.Year[j].replace(tempRegionService, empty);
 			}
+
 			model.appYearData.normalize();
-			trace(model.appYearData);
+			trace('Taking!');
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
-		}		
+		}
+		
+		private function restoreTakenData():void
+		{
+			var tempRegionService:String = model.tempCheckBoxData;
+			var empty:String = "";
+			
+			for(var k:int = 0; k < model.appYearData.Year.length() ; k++){
+				trace(model.storedKeyData[k].Country);
+				if(tempRegionService == model.storedKeyData[k].Country){
+					trace('Match!');
+					var tempName:XML = tempRegionService as XML;
+					model.appYearData.Year[k].tempName = model.storedKeyData[k].Traffic;
+				}
+			}
+			model.appYearData.normalize();
+			trace('Returning!');
+			var arrayNumber:int = model.storedKeys.indexOf(model.tempRegionService);
+			model.storedKeys[arrayNumber] = "";
+			
+			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
+		}
+		
 		private function convertXmlToArrayCollection( file:String ):ArrayCollection
 		{
 			var xml:XMLDocument = new XMLDocument( file );

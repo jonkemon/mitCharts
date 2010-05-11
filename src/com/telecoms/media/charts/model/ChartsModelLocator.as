@@ -17,7 +17,15 @@ package com.telecoms.media.charts.model
 		public var explodingArray:Array = [0,0,0,0,0,0];
 		public var refactoredPieData:ArrayCollection = new ArrayCollection;
 		public var tempCheckBoxData:String;
-		public var storedKeyData:Array = [0,0,0,0,0,0];
+		public var storedKeyData:ArrayCollection = new ArrayCollection([
+			{Country:"one"}, 
+			{Country:"two"}, 
+			{Country:"three"}, 
+			{Country:"four"}, 
+			{Country:"five"}, 
+			{Country:"six"}]);
+		public var storedKeys:Array = ["none"];
+		public var tempRegionService:String = new String;
 		
 		public var stackedColumnChart:ColumnChart = new ColumnChart;
 		public var chart:PieChart = new PieChart;

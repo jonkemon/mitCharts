@@ -15,10 +15,10 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import com.telecoms.media.charts.control.events.charts.CheckBoxEvent;
 			import com.telecoms.media.charts.control.events.charts.LoadAppYearEvent;
 			import com.telecoms.media.charts.model.ChartsModelLocator;
 			import com.telecoms.media.charts.view.charts.home;
-			import com.telecoms.media.charts.control.events.charts.CheckBoxEvent;
 			
 			import mx.controls.CheckBox;
 			
@@ -84,6 +84,7 @@
 			}
 			
 			private function checkboxClicked(event:MouseEvent):void {
+				var switchBox:Boolean = true;
 				// don't propagate this event up to the parent LegendItem
 
 				//checkbox.selected = !checkbox.selected;
