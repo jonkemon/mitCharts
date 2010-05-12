@@ -281,8 +281,8 @@
 			</mx:series>
 		</mx:ColumnChart>
 
-		<mx:HBox paddingLeft="335" paddingBottom="4">
-			<s:Button id="TakeAway" label="Take Away" click="removeData();" />
+		<mx:HBox paddingLeft="435" paddingBottom="4">
+			<!--<s:Button id="TakeAway" label="Take Away" click="removeData();" />-->
 			<s:Button id="Region" label="Region" click="{model.dataState=false;}stateSelect();"  />
 			<s:Button id="Service" label="Service" click="{model.dataState=true;}stateSelect();" />
 		</mx:HBox>
