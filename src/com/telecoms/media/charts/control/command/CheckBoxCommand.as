@@ -53,6 +53,7 @@ package com.telecoms.media.charts.control.command
 
 			model.appYearData.normalize();
 			trace('Taking!');
+			trace(model.appYearData);
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
 		}
@@ -61,21 +62,17 @@ package com.telecoms.media.charts.control.command
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
 			var empty:String = "";
-			var tempName:XML = <biff/>;
-			tempName.setLocalName(tempRegionService);
-
 			for(var i:int = 0; i < model.appYearData.Year.length() ; i++){
+				//trace(model.appYearDataClone.Year[i].child(tempRegionService));
+				var tempName:XML = <{tempRegionService}>{model.appYearDataClone.Year[i].child(tempRegionService)}</{tempRegionService}>;
 				model.appYearData.Year[i].appendChild(tempName);
-				trace(model.appYearData.Year[i].AfricaMiddleEast);
-				model.appYearData.Year[2].AfricaMiddleEast = 3134564;
-				model.appYearData.Year[3].AfricaMiddleEast = 4234566;
+				//trace(model.appYearData.Year[i].AfricaMiddleEast);
+				//trace('Index is '+model.appYearData.Year[0].child(tempRegionService));
+				//model.appYearData.childIndex()
+				//model.appYearData.Year[2].AfricaMiddleEast = 3134564;
+				//model.appYearData.Year[3].AfricaMiddleEast = 4234566;
 			}
-
-
 			
-			trace(model.appYearData);
-			
-			trace('We want this to be '+model.appYearData.Year[3].child('AfricaMiddleEast'));
 
 			/*for(var k:int = 0; k < model.appYearData.Year.length() ; k++){
 				trace(model.storedKeyData[k].Country);
@@ -87,6 +84,7 @@ package com.telecoms.media.charts.control.command
 			
 			model.appYearData.normalize();
 			trace('Returning!');
+			trace(model.appYearData);
 			
 			var arrayNumber:int = model.storedKeys.indexOf(model.tempRegionService);
 			model.storedKeys[arrayNumber] = "";
