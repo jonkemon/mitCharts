@@ -38,23 +38,16 @@ package com.telecoms.media.charts.control.command
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
 			var empty:String = "";
-			
-			var tempName:XML = tempRegionService as XML;
-			//trace(model.appYearData.childIndex());
-			trace(model.appYearData.Year.length());
+
 			for(var m:int = 0; m < model.appYearData.Year.length(); m++){
 				var item:Object = { Country: tempRegionService};
 				model.storedKeyData.addItem(item);
 			}
 			trace('Country is '+model.storedKeyData[0].Country);
-			//var item:Object = { Country: tempRegionService};
 			
 			model.storedKeys.push(tempRegionService);
-
-			//trace('Result = '+model.storedKeyData[0].Country);
 			
 			for(var j:int = 0; j<model.appYearData.Year.length(); j++){
-				//trace(model.appYearData.Year[j].child(tempRegionService));
 				model.appYearData.Year[j].replace(tempRegionService, empty);
 			}
 
@@ -70,16 +63,19 @@ package com.telecoms.media.charts.control.command
 			var empty:String = "";
 			var tempName:XML = <biff/>;
 			tempName.setLocalName(tempRegionService);
-			
-			model.appYearData.Year[0].appendChild(tempName);
-			model.appYearData.Year[1].appendChild(tempName);
-			model.appYearData.Year[2].appendChild(tempName);
-			model.appYearData.Year[3].appendChild(tempName);
-			model.appYearData.Year[4].appendChild(tempName);
-			model.appYearData.Year[5].appendChild(tempName);
 
-			trace('We want this to be '+model.appYearData.Year[0].child('AfricaMiddleEast'));
-			model.appYearData.Year.(@date == 2013).AfricaMiddleEast = 17345678;
+			for(var i:int = 0; i < model.appYearData.Year.length() ; i++){
+				model.appYearData.Year[i].appendChild(tempName);
+				trace(model.appYearData.Year[i].AfricaMiddleEast);
+				model.appYearData.Year[2].AfricaMiddleEast = 3134564;
+				model.appYearData.Year[3].AfricaMiddleEast = 4234566;
+			}
+
+
+			
+			trace(model.appYearData);
+			
+			trace('We want this to be '+model.appYearData.Year[3].child('AfricaMiddleEast'));
 
 			/*for(var k:int = 0; k < model.appYearData.Year.length() ; k++){
 				trace(model.storedKeyData[k].Country);
@@ -88,13 +84,14 @@ package com.telecoms.media.charts.control.command
 					//var tempName:XML = tempRegionService as XML;
 				}
 			}*/
+			
 			model.appYearData.normalize();
 			trace('Returning!');
+			
 			var arrayNumber:int = model.storedKeys.indexOf(model.tempRegionService);
-			//model.storedKeys[arrayNumber] = "";
+			model.storedKeys[arrayNumber] = "";
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
-			trace(model.appYearData);
 		}
 		
 		private function convertXmlToArrayCollection( file:String ):ArrayCollection
