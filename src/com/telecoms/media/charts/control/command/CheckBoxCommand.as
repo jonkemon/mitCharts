@@ -64,7 +64,8 @@ package com.telecoms.media.charts.control.command
 			var empty:String = "";
 			for(var i:int = 0; i < model.appYearData.Year.length() ; i++){
 				//trace(model.appYearDataClone.Year[i].child(tempRegionService));
-				var tempName:XML = <{tempRegionService}>{model.appYearDataClone.Year[i].child(tempRegionService)}</{tempRegionService}>;
+				var tempNumbervalue:int = model.appYearDataClone.Year[i].child(tempRegionService);
+				var tempName:XML = <{tempRegionService}>{tempNumbervalue}</{tempRegionService}>;
 				model.appYearData.Year[i].appendChild(tempName);
 				//trace(model.appYearData.Year[i].AfricaMiddleEast);
 				//trace('Index is '+model.appYearData.Year[0].child(tempRegionService));
