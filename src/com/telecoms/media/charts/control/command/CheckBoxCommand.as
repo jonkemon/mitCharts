@@ -25,16 +25,26 @@ package com.telecoms.media.charts.control.command
 		public function execute(event:CairngormEvent):void
 		{
 			model.tempRegionService = model.tempCheckBoxData;
-
-			if(model.storedKeys.indexOf(model.tempRegionService)>0){
-					restoreTakenData();
+			
+			if(model.dataState){
+				if(model.storedKeys.indexOf(model.tempRegionService)>0){
+						restoreTakenRegionalData();
+				}
+				else{					
+					takeRegionalData();
+				}
 			}
-			else{					
-				takeData();
+			else{
+				if(model.storedKeys.indexOf(model.tempRegionService)>0){
+					restoreTakenServiceData();
+				}
+				else{					
+					takeServiceData();
+				}
 			}
 		}
 		
-		private function takeData():void
+		private function takeRegionalData():void
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
 			var empty:String = "";
@@ -55,7 +65,7 @@ package com.telecoms.media.charts.control.command
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
 		}
 		
-		private function restoreTakenData():void
+		private function restoreTakenRegionalData():void
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
 			var empty:String = "";
@@ -71,6 +81,45 @@ package com.telecoms.media.charts.control.command
 			model.storedKeys[arrayNumber] = "";
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
+		}
+		
+		private function takeServiceData():void
+		{
+			var tempRegionService:String = model.tempCheckBoxData;
+			var empty:String = "";
+			
+			for(var m:int = 0; m < model.serviceYearData.Year.length(); m++){
+				var item:Object = { Country: tempRegionService};
+				model.storedKeyData.addItem(item);
+			}
+			
+			model.storedKeys.push(tempRegionService);
+			
+			for(var j:int = 0; j<model.serviceYearData.Year.length(); j++){
+				model.serviceYearData.Year[j].replace(tempRegionService, empty);
+			}
+			
+			model.serviceYearData.normalize();
+			
+			model.convertedServiceXML = convertXmlToArrayCollection(model.serviceYearData);
+		}
+		
+		private function restoreTakenServiceData():void
+		{
+			var tempRegionService:String = model.tempCheckBoxData;
+			var empty:String = "";
+			for(var i:int = 0; i < model.serviceYearData.Year.length() ; i++){
+				var tempNumbervalue:int = model.serviceYearDataClone.Year[i].child(tempRegionService);
+				var tempName:XML = <{tempRegionService}>{tempNumbervalue}</{tempRegionService}>;
+				model.serviceYearData.Year[i].appendChild(tempName);
+			}
+			
+			model.serviceYearData.normalize();
+			
+			var arrayNumber:int = model.storedKeys.indexOf(model.tempRegionService);
+			model.storedKeys[arrayNumber] = "";
+			
+			model.convertedServiceXML = convertXmlToArrayCollection(model.serviceYearData);
 		}
 		
 		private function convertXmlToArrayCollection( file:String ):ArrayCollection

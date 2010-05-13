@@ -63,12 +63,13 @@
 	
 		private function stateSelect():void
 		{
+			trace(model.dataState);
 			if(model.dataState){
 				trace('if!');
 				panelActionscript.removeChild(legend2);
 				panelActionscript.removeChild(ColumnChart2);
 				panelActionscript.removeChild(buttonContainer2);
-				model.dataState = false;
+				//model.dataState = false;
 				panelActionscript.addChildAt(legend1, 0);
 				panelActionscript.addChildAt(ColumnChart1, 1);
 				panelActionscript.addChild(buttonContainer1);
@@ -79,7 +80,7 @@
 				panelActionscript.removeChild(legend1);
 				panelActionscript.removeChild(ColumnChart1);
 				panelActionscript.removeChild(buttonContainer1);
-				model.dataState = true;
+				//model.dataState = true;
 				panelActionscript.addChildAt(legend2, 0);
 				panelActionscript.addChildAt(ColumnChart2, 1);
 				panelActionscript.addChild(buttonContainer2);
@@ -92,9 +93,19 @@
 			panelActionscript.removeChild(model.chart);
 			panelActionscript.addChildAt(legend1, 0);
 			panelActionscript.addChildAt(ColumnChart1, 1);
-			buttonContainer1.addChildAt(ColumnButtons1, 3);
+			//buttonContainer1.addChildAt(ColumnButtons1, 2);
 			ColumnButtons1.visible = true;
 			BackButtons1.visible = false;
+		}
+		
+		private function pieToServiceChartView():void
+		{
+			panelActionscript.removeChild(model.chart);
+			panelActionscript.addChildAt(legend2, 0);
+			panelActionscript.addChildAt(ColumnChart2, 1);
+			//buttonContainer1.addChildAt(ColumnButtons1, 2);
+			ColumnButtons2.visible = true;
+			BackButtons2.visible = false;
 		}
 		
 		private function createColChart():void
@@ -184,6 +195,7 @@
 		
 		private function createPieChart(e:ChartItemEvent):void
 		{
+			trace(model.dataState);
 			pieRefactoring(e);
 			
 			/* Define pie chart. */
@@ -228,12 +240,14 @@
 		private function pieRefactoring(e:ChartItemEvent):void
 		{
 			if(model.dataState){
+				trace('ifPie');
 				pieRegionRefactoring(e);
-				panelActionscript.addChild(buttonContainer2);
+				panelActionscript.addChild(buttonContainer1);
 				BackButtons1.visible = true;
 				BackButtons2.visible = false;
 			}
 			else{
+				trace('elsePie');
 				pieServiceRefactoring(e);
 				panelActionscript.addChild(buttonContainer2);
 				BackButtons1.visible = false;
@@ -330,7 +344,7 @@
 
 		<mx:HBox width="100%" id="buttonContainer1" horizontalGap="8">
 			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons1">
-				<s:Button id="ServiceBack" label="Back" click="{model.dataState=false;}pieToRegionChartView();" />
+				<s:Button id="ServiceBack" label="Back" click="pieToRegionChartView();" />
 			</mx:HBox>
 			<mx:HBox paddingLeft="428" paddingBottom="4" id="ColumnButtons1">
 				<s:Button id="Service" label="Service" click="{model.dataState=false;}stateSelect();loadXML();" />
@@ -359,7 +373,7 @@
 		
 		<mx:HBox width="100%" id="buttonContainer2">
 			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons2">
-				<s:Button id="RegionBack" label="Back" click="{model.dataState=true;}stateSelect();"  />
+				<s:Button id="RegionBack" label="Back" click="pieToServiceChartView();"  />
 			</mx:HBox>
 			<mx:HBox paddingLeft="428" paddingBottom="4" id="ColumnButtons2">
 				<s:Button id="Region" label="Region" click="{model.dataState=true;}stateSelect();loadXML();"  />
