@@ -12,6 +12,7 @@
 		import com.telecoms.media.charts.control.events.charts.LoadAppYearEvent;
 		import com.telecoms.media.charts.control.events.charts.LoadServiceYearEvent;
 		import com.telecoms.media.charts.model.ChartsModelLocator;
+		import com.telecoms.media.charts.view.charts.CheckBoxLegend;
 		
 		import mx.charts.CategoryAxis;
 		import mx.charts.ColumnChart;
@@ -36,6 +37,18 @@
 		private var series:PieSeries;
 		private	var c:int = 0;
 
+		//initiate display
+		public function init():void
+		{
+			panelActionscript.removeChild(ColumnChart2);
+			panelActionscript.removeChild(legend2);
+			panelActionscript.removeChild(buttonContainer2);
+			BackButtons1.visible = false;
+			BackButtons2.visible = false;
+			
+			loadXML();
+		}
+		
 		// Load Image data
 		public function loadXML():void
 		{
@@ -51,17 +64,39 @@
 		private function stateSelect():void
 		{
 			if(model.dataState){
-				panelActionscript.removeChildAt(1);
+				trace('if!');
+				panelActionscript.removeChild(legend2);
+				panelActionscript.removeChild(ColumnChart2);
+				panelActionscript.removeChild(buttonContainer2);
 				model.dataState = false;
-				createColChart();
+				panelActionscript.addChildAt(legend1, 0);
+				panelActionscript.addChildAt(ColumnChart1, 1);
+				panelActionscript.addChild(buttonContainer1);
+				ColumnButtons1.visible = true;
 			}
 			else{
-				panelActionscript.removeChildAt(1);
-				panelActionscript.addChildAt(ColumnChart1, 1);
+				trace('else!');
+				panelActionscript.removeChild(legend1);
+				panelActionscript.removeChild(ColumnChart1);
+				panelActionscript.removeChild(buttonContainer1);
 				model.dataState = true;
-				legend1.dataProvider = ColumnChart1;
+				panelActionscript.addChildAt(legend2, 0);
+				panelActionscript.addChildAt(ColumnChart2, 1);
+				panelActionscript.addChild(buttonContainer2);
+				ColumnButtons2.visible = true;
 			}
 		}
+		
+		private function pieToRegionChartView():void
+		{
+			panelActionscript.removeChild(model.chart);
+			panelActionscript.addChildAt(legend1, 0);
+			panelActionscript.addChildAt(ColumnChart1, 1);
+			buttonContainer1.addChildAt(ColumnButtons1, 3);
+			ColumnButtons1.visible = true;
+			BackButtons1.visible = false;
+		}
+		
 		private function createColChart():void
 		{
 			// Create a column chart object
@@ -87,7 +122,7 @@
 				{YField:"Entertainment", DisplayName:"Entertainment"},
 				{YField:"VideoTV", DisplayName:"Video/TV"},
 				{YField:"Information", DisplayName:"Information"},
-				{YField:"MobileBrowsing", DisplayName:"Mobile Browsing"},
+				{YField:"MobileBrowsing", DisplayName:"Mobile"},
 				{YField:"Portable", DisplayName:"Portable"}
 			]);
 			
@@ -113,7 +148,21 @@
 			// for displaying mixed charts i.e. c.series = [columnSet1, columnSet2];
 			model.stackedColumnChart.series = [columnSet];
 			
-			legend1.dataProvider = model.stackedColumnChart;
+			var as3ChartLegend:CheckBoxLegend = new CheckBoxLegend;
+			as3ChartLegend.dataProvider = model.stackedColumnChart;
+			
+			as3ChartLegend.percentWidth = 100;
+			as3ChartLegend.horizontalScrollPolicy = "off";
+			as3ChartLegend.verticalScrollPolicy = "off";
+			as3ChartLegend.height = 30;  
+			as3ChartLegend.setStyle("horizontalGap", 6);
+			as3ChartLegend.setStyle("paddingLeft", 10);
+			as3ChartLegend.setStyle("markerWidth", 7);
+
+			//as3ChartLegend.change = legendItemChanged(event);
+			
+			panelActionscript.removeChild(legend1);
+			panelActionscript.addChildAt(as3ChartLegend, 0);
 			panelActionscript.addChildAt(model.stackedColumnChart, 1);
 		}
 		
@@ -158,8 +207,9 @@
 			
 			model.chart.series = [series];
 			
-			/* Update Legend */
-			legend1.dataProvider = model.chart;
+			// Remove button
+			ColumnButtons1.visible = false;
+			ColumnButtons2.visible = false;
 			
 			// Add onClick event to wedges
 			model.chart.addEventListener(ChartItemEvent.ITEM_CLICK, explodeSlice);
@@ -179,9 +229,15 @@
 		{
 			if(model.dataState){
 				pieRegionRefactoring(e);
+				panelActionscript.addChild(buttonContainer2);
+				BackButtons1.visible = true;
+				BackButtons2.visible = false;
 			}
 			else{
 				pieServiceRefactoring(e);
+				panelActionscript.addChild(buttonContainer2);
+				BackButtons1.visible = false;
+				BackButtons2.visible = true;
 			}
 		}
 		private function pieServiceRefactoring(e:ChartItemEvent):void
@@ -206,16 +262,7 @@
 				model.refactoredPieData.addItem(item);
 			}
 		}
-		private function removeData():void
-		{
-			if(model.dataState){
-				model.convertedXML.removeItemAt(2);
-			}
-			else {
-				model.convertedServiceXML.removeItemAt(2);
-				model.stackedColumnChart.dataProvider = model.convertedServiceXML;
-			}
-		}
+
 		private function legendItemChanged(event:CheckBoxLegendItemChangedEvent):void {
 			var txt:String = "legendItemChanged: " + event.legendItem.label +
 				" [" + (event.legendItemSelected ? "selected]" : "not selected]");
@@ -281,11 +328,44 @@
 			</mx:series>
 		</mx:ColumnChart>
 
-		<mx:HBox paddingLeft="435" paddingBottom="4">
-			<!--<s:Button id="TakeAway" label="Take Away" click="removeData();" />-->
-			<s:Button id="Region" label="Region" click="{model.dataState=false;}stateSelect();"  />
-			<s:Button id="Service" label="Service" click="{model.dataState=true;}stateSelect();" />
+		<mx:HBox width="100%" id="buttonContainer1" horizontalGap="8">
+			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons1">
+				<s:Button id="ServiceBack" label="Back" click="{model.dataState=false;}pieToRegionChartView();" />
+			</mx:HBox>
+			<mx:HBox paddingLeft="428" paddingBottom="4" id="ColumnButtons1">
+				<s:Button id="Service" label="Service" click="{model.dataState=false;}stateSelect();loadXML();" />
+			</mx:HBox>	
 		</mx:HBox>
+		
+		<charts:CheckBoxLegend id="legend2" dataProvider="{ColumnChart2}" width="100%" height="30" 
+							   paddingLeft="10" horizontalGap="6" change="legendItemChanged(event)" markerWidth="7" />
+		
+		<mx:ColumnChart id="ColumnChart2" height="250" width="100%"
+						paddingLeft="5" paddingRight="5" type="stacked"
+						showDataTips="true" dataProvider="{model.convertedServiceXML}" itemClick="{drillDown(event)}" >
+			<mx:horizontalAxis>
+				<mx:CategoryAxis categoryField="date" displayName="date"/>
+			</mx:horizontalAxis>
+			
+			<mx:series>
+				<mx:ColumnSeries id="cs6" yField="Communication" displayName="Communication" showDataEffect="slideIn" hideDataEffect="slideOut"/>
+				<mx:ColumnSeries id="cs7" yField="Entertainment" displayName="Entertainment" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs8" yField="VideoTV" displayName="Video/TV" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs9" yField="Information" displayName="Information" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs10" yField="MobileBrowsing" displayName="Mobile" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs11" yField="Portable" displayName="Portable" showDataEffect="slideIn" hideDataEffect="slideOut" />
+			</mx:series>
+		</mx:ColumnChart>
+		
+		<mx:HBox width="100%" id="buttonContainer2">
+			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons2">
+				<s:Button id="RegionBack" label="Back" click="{model.dataState=true;}stateSelect();"  />
+			</mx:HBox>
+			<mx:HBox paddingLeft="428" paddingBottom="4" id="ColumnButtons2">
+				<s:Button id="Region" label="Region" click="{model.dataState=true;}stateSelect();loadXML();"  />
+			</mx:HBox>
+		</mx:HBox>
+		
 	</mx:Panel>
 
 </mx:VBox>

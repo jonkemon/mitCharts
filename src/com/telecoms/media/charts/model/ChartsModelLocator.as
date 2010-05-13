@@ -1,5 +1,7 @@
 package com.telecoms.media.charts.model
 {
+	import com.telecoms.media.charts.view.charts.CheckBoxLegend;
+	
 	import mx.charts.ColumnChart;
 	import mx.charts.PieChart;
 	import mx.collections.ArrayCollection;
@@ -31,6 +33,9 @@ package com.telecoms.media.charts.model
 		public var tempRegionService:String = new String;
 		
 		public var stackedColumnChart:ColumnChart = new ColumnChart;
+		public var servicesColumnChart:ColumnChart = new ColumnChart;
+		public var as3ChartLegend:CheckBoxLegend = new CheckBoxLegend;
+		
 		public var chart:PieChart = new PieChart;
 		static public function getInstance():ChartsModelLocator
 		{
