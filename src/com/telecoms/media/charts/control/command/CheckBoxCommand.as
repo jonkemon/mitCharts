@@ -48,6 +48,8 @@ package com.telecoms.media.charts.control.command
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
 			var empty:String = "";
+			var zeroValue:int = 0;
+			var tempEmptyName:XML = <{tempRegionService}>{zeroValue}</{tempRegionService}>;
 
 			for(var m:int = 0; m < model.appYearData.Year.length(); m++){
 				var item:Object = { Country: tempRegionService};
@@ -57,32 +59,29 @@ package com.telecoms.media.charts.control.command
 			model.storedKeys.push(tempRegionService);
 			
 			for(var j:int = 0; j<model.appYearData.Year.length(); j++){
-				model.appYearData.Year[j].replace(tempRegionService, empty);
+				model.appYearData.Year[j][tempRegionService] = 0;
 			}
-
 			model.appYearData.normalize();
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
 			
-			var dataLength:int = model.appYearData.Year.(@date == model.yearValue).children().length();
+			var dataLength1:int = model.appYearData.Year.(@date == model.yearValue).children().length();
 			model.refactoredPieData.removeAll();
 			
-			for(var i:int = 0; i < dataLength ; i++){
-				var item:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(i)};
-				model.refactoredPieData.addItem(item);
+			for(var i:int = 0; i < dataLength1 ; i++){
+				var item1:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(i)};
+				model.refactoredPieData.addItem(item1);
 			}
 		}
 		
 		private function restoreTakenRegionalData():void
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
-			var empty:String = "";
+
 			for(var i:int = 0; i < model.appYearData.Year.length() ; i++){
 				var tempNumbervalue:int = model.appYearDataClone.Year[i].child(tempRegionService);
-				var tempName:XML = <{tempRegionService}>{tempNumbervalue}</{tempRegionService}>;
-				model.appYearData.Year[i].appendChild(tempName);
+				model.appYearData.Year[i][tempRegionService] = tempNumbervalue;
 			}
-			
 			model.appYearData.normalize();
 			
 			var arrayNumber:int = model.storedKeys.indexOf(model.tempRegionService);
@@ -90,19 +89,18 @@ package com.telecoms.media.charts.control.command
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
 			
-			var dataLength:int = model.appYearData.Year.(@date == model.yearValue).children().length();
+			var dataLength2:int = model.appYearData.Year.(@date == model.yearValue).children().length();
 			model.refactoredPieData.removeAll();
 			
-			for(var i:int = 0; i < dataLength ; i++){
-				var item:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(i)};
-				model.refactoredPieData.addItem(item);
+			for(var n:int = 0; n < dataLength2 ; n++){
+				var item2:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(n).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(n)};
+				model.refactoredPieData.addItem(item2);
 			}
 		}
 		
 		private function takeServiceData():void
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
-			var empty:String = "";
 			
 			for(var m:int = 0; m < model.serviceYearData.Year.length(); m++){
 				var item:Object = { Country: tempRegionService};
@@ -112,33 +110,29 @@ package com.telecoms.media.charts.control.command
 			model.storedKeys.push(tempRegionService);
 			
 			for(var j:int = 0; j<model.serviceYearData.Year.length(); j++){
-				model.serviceYearData.Year[j].replace(tempRegionService, empty);
+				model.serviceYearData.Year[j][tempRegionService] = 0;
 			}
-			
 			model.serviceYearData.normalize();
 			
 			model.convertedServiceXML = convertXmlToArrayCollection(model.serviceYearData);
-			model.refactoredPieData.removeItemAt(3);
 			
 			var dataLength:int = model.serviceYearData.Year.(@date == model.yearValue).children().length();
 			model.refactoredPieData.removeAll();
 			
 			for(var i:int = 0; i < dataLength ; i++){
-				var item:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(i)};
-				model.refactoredPieData.addItem(item);
+				var item1:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(i)};
+				model.refactoredPieData.addItem(item1);
 			}
 		}
 		
 		private function restoreTakenServiceData():void
 		{
 			var tempRegionService:String = model.tempCheckBoxData;
-			var empty:String = "";
+
 			for(var i:int = 0; i < model.serviceYearData.Year.length() ; i++){
 				var tempNumbervalue:int = model.serviceYearDataClone.Year[i].child(tempRegionService);
-				var tempName:XML = <{tempRegionService}>{tempNumbervalue}</{tempRegionService}>;
-				model.serviceYearData.Year[i].appendChild(tempName);
+				model.serviceYearData.Year[i][tempRegionService] = tempNumbervalue;
 			}
-			
 			model.serviceYearData.normalize();
 			
 			var arrayNumber:int = model.storedKeys.indexOf(model.tempRegionService);
@@ -149,9 +143,9 @@ package com.telecoms.media.charts.control.command
 			var dataLength:int = model.serviceYearData.Year.(@date == model.yearValue).children().length();
 			model.refactoredPieData.removeAll();
 			
-			for(var i:int = 0; i < dataLength ; i++){
-				var item:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(i)};
-				model.refactoredPieData.addItem(item);
+			for(var o:int = 0; o < dataLength ; o++){
+				var item2:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(o).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(o)};
+				model.refactoredPieData.addItem(item2);
 			}
 		}
 		

@@ -88,7 +88,7 @@
 			}
 			
 			private function checkboxClicked(event:MouseEvent):void {
-				var switchBox:Boolean = true;
+				//trace(event.currentTarget.label);
 				// don't propagate this event up to the parent LegendItem
 
 				//checkbox.selected = !checkbox.selected;

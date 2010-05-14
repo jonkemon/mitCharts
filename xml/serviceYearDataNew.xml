@@ -5,7 +5,7 @@
 	    <Entertainment>50745</Entertainment>
 	    <VideoTV>78254</VideoTV>
 	    <Information>4891</Information>
-	    <MobileBrowsing>73652</MobileBrowsing>
+	    <Mobile>73652</Mobile>
 	    <Portable>482646</Portable>
 	</Year>
 	<Year date="2010">
@@ -13,7 +13,7 @@
 	    <Entertainment>71378</Entertainment>
 	    <VideoTV>132614</VideoTV>
 	    <Information>8436</Information>
-	    <MobileBrowsing>128302</MobileBrowsing>
+	    <Mobile>128302</Mobile>
 	    <Portable>1020804</Portable>
 	</Year>
 	<Year date="2011">
@@ -21,7 +21,7 @@
 	    <Entertainment>102549</Entertainment>
 	    <VideoTV>217832</VideoTV>
 	    <Information>14235</Information>
-	    <MobileBrowsing>218728</MobileBrowsing>
+	    <Mobile>218728</Mobile>
 	    <Portable>2063766</Portable>
 	</Year>
 	<Year date="2012">
@@ -29,7 +29,7 @@
 	    <Entertainment>152940</Entertainment>
 	    <VideoTV>355642</VideoTV>
 	    <Information>23830</Information>
-	    <MobileBrowsing>374197</MobileBrowsing>
+	    <Mobile>374197</Mobile>
 	    <Portable>4027969</Portable>
 	</Year>
 	<Year date="2013">
@@ -37,7 +37,7 @@
 	    <Entertainment>233308</Entertainment>
 	    <VideoTV>568685</VideoTV>
 	    <Information>39185</Information>
-	    <MobileBrowsing>638327</MobileBrowsing>
+	    <Mobile>638327</Mobile>
 	    <Portable>7584072</Portable>
 	</Year>
 	<Year date="2014">
@@ -45,7 +45,7 @@
 	    <Entertainment>354757</Entertainment>
 	    <VideoTV>892472</VideoTV>
 	    <Information>62597</Information>
-	    <MobileBrowsing>1065881</MobileBrowsing>
+	    <Mobile>1065881</Mobile>
 	    <Portable>13698014</Portable>
 	</Year>
 </content>
