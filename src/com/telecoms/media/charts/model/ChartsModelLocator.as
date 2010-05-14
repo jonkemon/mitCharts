@@ -22,15 +22,10 @@ package com.telecoms.media.charts.model
 		public var refactoredPieData:ArrayCollection = new ArrayCollection;
 		public var tempCheckBoxData:String;
 		public var tempNameStore:XML = new XML;
-		public var storedKeyData:ArrayCollection = new ArrayCollection([
-			{Country:"one"}, 
-			{Country:"two"}, 
-			{Country:"three"}, 
-			{Country:"four"}, 
-			{Country:"five"}, 
-			{Country:"six"}]);
+		public var storedKeyData:ArrayCollection = new ArrayCollection([{Country:"one"},{Country:"two"},{Country:"three"},{Country:"four"},{Country:"five"},{Country:"six"}]);
 		public var storedKeys:Array = ["none"];
 		public var tempRegionService:String = new String;
+		public var yearValue:int;
 		
 		public var stackedColumnChart:ColumnChart = new ColumnChart;
 		public var servicesColumnChart:ColumnChart = new ColumnChart;

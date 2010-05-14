@@ -63,6 +63,14 @@ package com.telecoms.media.charts.control.command
 			model.appYearData.normalize();
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
+			
+			var dataLength:int = model.appYearData.Year.(@date == model.yearValue).children().length();
+			model.refactoredPieData.removeAll();
+			
+			for(var i:int = 0; i < dataLength ; i++){
+				var item:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(i)};
+				model.refactoredPieData.addItem(item);
+			}
 		}
 		
 		private function restoreTakenRegionalData():void
@@ -81,6 +89,14 @@ package com.telecoms.media.charts.control.command
 			model.storedKeys[arrayNumber] = "";
 			
 			model.convertedXML = convertXmlToArrayCollection(model.appYearData);
+			
+			var dataLength:int = model.appYearData.Year.(@date == model.yearValue).children().length();
+			model.refactoredPieData.removeAll();
+			
+			for(var i:int = 0; i < dataLength ; i++){
+				var item:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(i)};
+				model.refactoredPieData.addItem(item);
+			}
 		}
 		
 		private function takeServiceData():void
@@ -102,6 +118,15 @@ package com.telecoms.media.charts.control.command
 			model.serviceYearData.normalize();
 			
 			model.convertedServiceXML = convertXmlToArrayCollection(model.serviceYearData);
+			model.refactoredPieData.removeItemAt(3);
+			
+			var dataLength:int = model.serviceYearData.Year.(@date == model.yearValue).children().length();
+			model.refactoredPieData.removeAll();
+			
+			for(var i:int = 0; i < dataLength ; i++){
+				var item:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(i)};
+				model.refactoredPieData.addItem(item);
+			}
 		}
 		
 		private function restoreTakenServiceData():void
@@ -120,6 +145,14 @@ package com.telecoms.media.charts.control.command
 			model.storedKeys[arrayNumber] = "";
 			
 			model.convertedServiceXML = convertXmlToArrayCollection(model.serviceYearData);
+			
+			var dataLength:int = model.serviceYearData.Year.(@date == model.yearValue).children().length();
+			model.refactoredPieData.removeAll();
+			
+			for(var i:int = 0; i < dataLength ; i++){
+				var item:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(i)};
+				model.refactoredPieData.addItem(item);
+			}
 		}
 		
 		private function convertXmlToArrayCollection( file:String ):ArrayCollection

@@ -81,6 +81,10 @@
 				// doesn't fire a CHANGE event, so we'll do it manually
 				checkbox.selected = !checkbox.selected;
 				checkbox.dispatchEvent(new Event(Event.CHANGE));
+				
+				var checkBoxEvent:CheckBoxEvent=null;
+				checkBoxEvent=new CheckBoxEvent();
+				checkBoxEvent.dispatch();
 			}
 			
 			private function checkboxClicked(event:MouseEvent):void {

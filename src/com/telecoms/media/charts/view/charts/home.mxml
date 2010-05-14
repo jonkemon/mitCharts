@@ -240,14 +240,12 @@
 		private function pieRefactoring(e:ChartItemEvent):void
 		{
 			if(model.dataState){
-				trace('ifPie');
 				pieRegionRefactoring(e);
 				panelActionscript.addChild(buttonContainer1);
 				BackButtons1.visible = true;
 				BackButtons2.visible = false;
 			}
 			else{
-				trace('elsePie');
 				pieServiceRefactoring(e);
 				panelActionscript.addChild(buttonContainer2);
 				BackButtons1.visible = false;
@@ -256,23 +254,23 @@
 		}
 		private function pieServiceRefactoring(e:ChartItemEvent):void
 		{
-			var yearValue:int = e.hitData.item.date;
-			var dataLength:int = model.serviceYearData.Year.(@date == yearValue).children().length();
+			model.yearValue = e.hitData.item.date;
+			var dataLength:int = model.serviceYearData.Year.(@date == model.yearValue).children().length();
 			model.refactoredPieData.removeAll();
 			
 			for(var i:int = 0; i < dataLength ; i++){
-				var item:Object = { Year: yearValue, Country: model.serviceYearData.Year.(@date == yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == yearValue).child(i)};
+				var item:Object = { Year: model.yearValue, Country: model.serviceYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.serviceYearData.Year.(@date == model.yearValue).child(i)};
 				model.refactoredPieData.addItem(item);
 			}
 		}
 		private function pieRegionRefactoring(e:ChartItemEvent):void
 		{
-			var yearValue:int = e.hitData.item.date;
-			var dataLength:int = model.appYearData.Year.(@date == yearValue).children().length();
+			model.yearValue = e.hitData.item.date;
+			var dataLength:int = model.appYearData.Year.(@date == model.yearValue).children().length();
 			model.refactoredPieData.removeAll();
 			
 			for(var i:int = 0; i < dataLength ; i++){
-				var item:Object = { Year: yearValue, Country: model.appYearData.Year.(@date == yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == yearValue).child(i)};
+				var item:Object = { Year: model.yearValue, Country: model.appYearData.Year.(@date == model.yearValue).child(i).name(), Traffic: model.appYearData.Year.(@date == model.yearValue).child(i)};
 				model.refactoredPieData.addItem(item);
 			}
 		}
@@ -301,7 +299,7 @@
 
 	]]>
 </mx:Script>	
-	
+
 	<!-- Define custom colors for use as fills in the AreaChart control. -->
 	<mx:SolidColor id="sc1" color="blue" alpha=".3"/>
 	<mx:SolidColor id="sc2" color="red" alpha=".3"/>
@@ -310,11 +308,11 @@
 	<mx:SolidColor id="sc5" color="yellow" alpha=".3"/>
 	
 	<!-- Define custom Strokes. -->
-	<mx:Stroke id = "s1" color="blue" weight="2"/>
+	<!--<mx:Stroke id = "s1" color="blue" weight="2"/>
 	<mx:Stroke id = "s2" color="red" weight="2"/>
 	<mx:Stroke id = "s3" color="green" weight="2"/>
 	<mx:Stroke id = "s4" color="black" weight="2"/>
-	<mx:Stroke id = "s5" color="yellow" weight="2"/>
+	<mx:Stroke id = "s5" color="yellow" weight="2"/>-->
 	
 	<mx:SeriesSlide id="slideIn" duration="1000" direction="up"/>
 	<mx:SeriesSlide id="slideOut" duration="1000" direction="down"/>
