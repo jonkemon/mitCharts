@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- KeyInfo.mxml -->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+				width="150" 
+				height="100" 
+				rollOut="closeMoreInfo();">
+	
+<mx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			private function titleWindow_close(evt:CloseEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function closeMoreInfo():void {
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+</mx:Script>
+	
+	<mx:String id="info" source="info.txt" />
+	
+	<mx:TextArea id="txt"
+				 htmlText="{info}"
+				 focusAlpha="0.0"
+				 width="100%"
+				 height="100%" />
+	
+</mx:Canvas>

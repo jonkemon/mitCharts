@@ -321,11 +321,11 @@
 			</mx:horizontalAxis>
 			
 			<mx:series>
-				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" showDataEffect="slideIn" hideDataEffect="slideOut"/>
-				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs3" yField="AsiaPacific" displayName="Asia-Pacific" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs4" yField="Europe" displayName="Europe" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs5" yField="AfricaMiddleEast" displayName="Africa/Middle-East" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" validationSubField="North America" showDataEffect="slideIn" hideDataEffect="slideOut"/>
+				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" validationSubField="Latin America" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs3" yField="AsiaPacific" displayName="Asia-Pacific" validationSubField="Asia-Pacific" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs4" yField="Europe" displayName="Europe" validationSubField="Europe" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs5" yField="AfricaMiddleEast" displayName="Africa/Middle-East" validationSubField="Africa/Middle-East" showDataEffect="slideIn" hideDataEffect="slideOut" />
 			</mx:series>
 		</mx:ColumnChart>
 
@@ -351,12 +351,12 @@
 			</mx:horizontalAxis>
 			
 			<mx:series>
-				<mx:ColumnSeries id="cs6" yField="Communication" displayName="Communication" showDataEffect="slideIn" hideDataEffect="slideOut"/>
-				<mx:ColumnSeries id="cs7" yField="Entertainment" displayName="Entertainment" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs8" yField="VideoTV" displayName="Video/TV" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs9" yField="Information" displayName="Information" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs10" yField="Mobile" displayName="Mobile" showDataEffect="slideIn" hideDataEffect="slideOut" />
-				<mx:ColumnSeries id="cs11" yField="Portable" displayName="Portable" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs6" yField="Communication" displayName="Communication" validationSubField="Communication: VOIP, Messaging" showDataEffect="slideIn" hideDataEffect="slideOut"/>
+				<mx:ColumnSeries id="cs7" yField="Entertainment" displayName="Entertainment" validationSubField="Entertainment: Music, Games, Images, Gambling" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs8" yField="VideoTV" displayName="Video/TV" validationSubField="Video/TV: TV, Video" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs9" yField="Information" displayName="Information" validationSubField="Information: LBS, Social Networking, Mobile Payments/Banking" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs10" yField="Mobile" displayName="Mobile" validationSubField="Mobile Browsing: Mobile Internet (on mobile handsets)" showDataEffect="slideIn" hideDataEffect="slideOut" />
+				<mx:ColumnSeries id="cs11" yField="Portable" displayName="Portable" validationSubField="Portable Internet: ‘Mobile Broadband’ via Embedded Modems, Dongles, Datacards" showDataEffect="slideIn" hideDataEffect="slideOut" />
 			</mx:series>
 		</mx:ColumnChart>
 		

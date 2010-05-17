@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:LegendItem xmlns:mx="http://www.adobe.com/2006/mxml" 
-			   click="legendItemClicked(event)" paddingLeft="20">
-	
+			   paddingLeft="20" doubleClick="legendDoubleClick(event)"
+			   >
+
 	<!--
 	This LegendItem adds a CheckBox on the left of the legend item.
 	When the CheckBox is selected it fires a Event.CHANGE event which is
@@ -21,8 +22,12 @@
 			import com.telecoms.media.charts.view.charts.home;
 			
 			import mx.controls.CheckBox;
+			import mx.controls.Text;
+			import mx.managers.PopUpManager;
+			import mx.managers.ToolTipManager;
 			
 			private var _checkbox:CheckBox;
+			private var win:KeyInfo = new KeyInfo;
 			
 			[Bindable]
 			public var model:ChartsModelLocator = ChartsModelLocator.getInstance();
@@ -54,6 +59,8 @@
 			}
 			
 			override protected function createChildren():void {
+				super.toolTip = this.source.validationSubField.toString();
+				ToolTipManager.showDelay = 500;
 				super.createChildren();
 				// add the checkbox last
 				addChild(checkbox);
@@ -105,7 +112,17 @@
 				dispatchEvent(event.clone());
 			}
 			
+			private function legendDoubleClick(event:Event):void {
+				launchMoreInfo();
+			}
+			
+			private function launchMoreInfo():void {
+				win = PopUpManager.createPopUp(this, KeyInfo, true) as KeyInfo;
+				PopUpManager.centerPopUp(win);
+			}
 		]]>
 	</mx:Script>
+	
+	<mx:String id="info" source="info.txt" />
 	
 </mx:LegendItem>
