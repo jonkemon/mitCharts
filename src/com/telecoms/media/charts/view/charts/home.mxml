@@ -18,6 +18,7 @@
 		import mx.charts.ColumnChart;
 		import mx.charts.Legend;
 		import mx.charts.PieChart;
+		import mx.charts.chartClasses.IAxis;
 		import mx.charts.chartClasses.Series;
 		import mx.charts.events.ChartItemEvent;
 		import mx.charts.series.ColumnSeries;
@@ -90,6 +91,10 @@
 			panelActionscript.addChildAt(ColumnChart1, 1);
 			ColumnButtons1.visible = true;
 			BackButtons1.visible = false;
+			bc1Tag.visible = false;
+			bc1Title.visible = false;
+			model.refactoredPieData.removeAll();
+			model.storedKeys = ["none"];
 		}
 		
 		private function pieToServiceChartView():void
@@ -100,6 +105,10 @@
 			//buttonContainer1.addChildAt(ColumnButtons1, 2);
 			ColumnButtons2.visible = true;
 			BackButtons2.visible = false;
+			bc2Tag.visible = false;
+			bc2Title.visible = false;
+			model.refactoredPieData.removeAll();
+			model.storedKeys = ["none"];
 		}
 		
 		private function createColChart():void
@@ -230,12 +239,18 @@
 				panelActionscript.addChild(buttonContainer1);
 				BackButtons1.visible = true;
 				BackButtons2.visible = false;
+				bc1Tag.visible = true;
+				bc1Title.visible = true;
+				bc2Title.visible = false;
 			}
 			else{
 				pieServiceRefactoring(e);
 				panelActionscript.addChild(buttonContainer2);
 				BackButtons1.visible = false;
 				BackButtons2.visible = true;
+				bc2Tag.visible = true;
+				bc1Title.visible = false;
+				bc2Title.visible = true;
 			}
 		}
 		private function pieServiceRefactoring(e:ChartItemEvent):void
@@ -262,8 +277,6 @@
 		}
 
 		private function legendItemChanged(event:CheckBoxLegendItemChangedEvent):void {
-			var txt:String = "legendItemChanged: " + event.legendItem.label +
-				" [" + (event.legendItemSelected ? "selected]" : "not selected]");
 			var refactorString:String = stripSpaces(event.legendItem.label);
 			model.tempCheckBoxData = stripHyphen(stripSlashes(refactorString));
 		}
@@ -282,28 +295,24 @@
 			var original:Array = originalString.split("-");
 			return (original.join(""));
 		}
+		
+		private function vAxisTBLabel(labelValue:Number, previousValue:Object, axis:IAxis):String
+		{
+			return dataFormatConverterTB.format(labelValue/10000000);
+		}
 
 	]]>
 </mx:Script>	
 
-	<!-- Define custom colors for use as fills in the AreaChart control. -->
-	<mx:SolidColor id="sc1" color="blue" alpha=".3"/>
-	<mx:SolidColor id="sc2" color="red" alpha=".3"/>
-	<mx:SolidColor id="sc3" color="green" alpha=".3"/>
-	<mx:SolidColor id="sc4" color="black" alpha=".3"/>
-	<mx:SolidColor id="sc5" color="yellow" alpha=".3"/>
-	
-	<!-- Define custom Strokes. -->
-	<!--<mx:Stroke id = "s1" color="blue" weight="2"/>
-	<mx:Stroke id = "s2" color="red" weight="2"/>
-	<mx:Stroke id = "s3" color="green" weight="2"/>
-	<mx:Stroke id = "s4" color="black" weight="2"/>
-	<mx:Stroke id = "s5" color="yellow" weight="2"/>-->
+	<!-- Animations for show and hide effects -->
 	
 	<mx:SeriesSlide id="slideIn" duration="1000" direction="up"/>
 	<mx:SeriesSlide id="slideOut" duration="1000" direction="down"/>
 	
 	<mx:SeriesInterpolate id="interpolate" duration="1000"/>
+	
+	<!-- Format the Chart Axis-->
+	<mx:NumberFormatter id="dataFormatConverterTB" precision="1" rounding="nearest" />
 
 <mx:VBox>
 	<mx:Panel width="600" title="Mobile Internet Traffic" id="panelActionscript"  horizontalAlign="center">
@@ -320,6 +329,10 @@
 				<mx:CategoryAxis categoryField="date" displayName="date"/>
 			</mx:horizontalAxis>
 			
+			<mx:verticalAxis>
+				<mx:LinearAxis title="TB" labelFunction="vAxisTBLabel" />
+			</mx:verticalAxis>
+			
 			<mx:series>
 				<mx:ColumnSeries id="cs1" yField="NorthAmerica" displayName="North America" validationSubField="North America" showDataEffect="slideIn" hideDataEffect="slideOut"/>
 				<mx:ColumnSeries id="cs2" yField="LatinAmerica" displayName="Latin America" validationSubField="Latin America" showDataEffect="slideIn" hideDataEffect="slideOut" />
@@ -329,12 +342,15 @@
 			</mx:series>
 		</mx:ColumnChart>
 
-		<mx:HBox width="100%" id="buttonContainer1" horizontalGap="8">
-			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons1">
+		<mx:HBox width="100%" id="buttonContainer1" horizontalGap="0">
+			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons1" horizontalAlign="left" width="100%">
 				<s:Button id="ServiceBack" label="Back" click="pieToRegionChartView();loadXML();" />
 			</mx:HBox>
-			<mx:HBox paddingLeft="428" paddingBottom="4" id="ColumnButtons1">
-				<s:Button id="Service" label="Service" click="{model.dataState=false;}stateSelect();loadXML();" />
+			<mx:Text id="bc1Tag" text="Data for:" width="100%" textAlign="right" fontSize="16" visible="false"/>
+			<mx:Text id="bc1Title" text="{model.yearValue}" width="100%" textAlign="left" visible="false" fontWeight="bold"
+					  fontSize="16"/>
+			<mx:HBox paddingRight="7" paddingBottom="4" id="ColumnButtons1" horizontalAlign="right" width="100%">
+				<s:Button id="Service" label="Switch to Service" click="{model.dataState=false;}stateSelect();loadXML();" />
 			</mx:HBox>	
 		</mx:HBox>
 		
@@ -350,8 +366,12 @@
 				<mx:CategoryAxis categoryField="date" displayName="date"/>
 			</mx:horizontalAxis>
 			
+			<mx:verticalAxis>
+				<mx:LinearAxis title="TB" labelFunction="vAxisTBLabel" />
+			</mx:verticalAxis>
+			
 			<mx:series>
-				<mx:ColumnSeries id="cs6" yField="Communication" displayName="Communication" validationSubField="Communication: VOIP, Messaging" showDataEffect="slideIn" hideDataEffect="slideOut"/>
+				<mx:ColumnSeries id="cs6" yField="Comms" displayName="Communication" validationSubField="Communication: VOIP, Messaging" showDataEffect="slideIn" hideDataEffect="slideOut"/>
 				<mx:ColumnSeries id="cs7" yField="Entertainment" displayName="Entertainment" validationSubField="Entertainment: Music, Games, Images, Gambling" showDataEffect="slideIn" hideDataEffect="slideOut" />
 				<mx:ColumnSeries id="cs8" yField="VideoTV" displayName="Video/TV" validationSubField="Video/TV: TV, Video" showDataEffect="slideIn" hideDataEffect="slideOut" />
 				<mx:ColumnSeries id="cs9" yField="Information" displayName="Information" validationSubField="Information: LBS, Social Networking, Mobile Payments/Banking" showDataEffect="slideIn" hideDataEffect="slideOut" />
@@ -360,12 +380,15 @@
 			</mx:series>
 		</mx:ColumnChart>
 		
-		<mx:HBox width="100%" id="buttonContainer2">
-			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons2">
+		<mx:HBox width="100%" id="buttonContainer2" horizontalGap="0">
+			<mx:HBox paddingBottom="4" paddingLeft="10" id="BackButtons2" horizontalAlign="left" width="100%">
 				<s:Button id="RegionBack" label="Back" click="pieToServiceChartView();loadXML();"  />
 			</mx:HBox>
-			<mx:HBox paddingLeft="428" paddingBottom="4" id="ColumnButtons2">
-				<s:Button id="Region" label="Region" click="{model.dataState=true;}stateSelect();loadXML();"  />
+			<mx:Text id="bc2Tag" text="Data for:" width="100%" textAlign="right" fontSize="16" visible="false"/>
+			<mx:Text id="bc2Title" text="{model.yearValue}" width="100%" textAlign="left" visible="false" fontWeight="bold"
+					  fontSize="16"/>
+			<mx:HBox paddingRight="7" paddingBottom="4" id="ColumnButtons2" horizontalAlign="right" width="100%">
+				<s:Button id="Region" label="Switch to Region" click="{model.dataState=true;}stateSelect();loadXML();"  />
 			</mx:HBox>
 		</mx:HBox>
 		

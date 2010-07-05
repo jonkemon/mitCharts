@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rds:ServiceLocator xmlns:rds="com.adobe.cairngorm.business.*" xmlns:mx="http://www.adobe.com/2006/mxml">
-	<mx:HTTPService id="appYearRetrieve" url="../xml/regionYearDataNew.xml" resultFormat="e4x"/>
-	<mx:HTTPService id="appServiceRetrieve" url="../xml/serviceYearDataNew.xml" resultFormat="e4x"/>
+	<mx:HTTPService id="appYearRetrieve" url="http://media2.telecoms.com/loader_flash/charts/mitCharts/xml/regionYearDataNew.xml" resultFormat="e4x"/>
+	<mx:HTTPService id="appServiceRetrieve" url="http://media2.telecoms.com/loader_flash/charts/mitCharts/xml/serviceYearDataNew.xml" resultFormat="e4x"/>
 </rds:ServiceLocator>
 <!-- LOCAL CONNECTION IS http://10.8.42.6/displaycontentswithxml/ -->
