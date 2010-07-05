@@ -191,9 +191,15 @@
 		// Exploding wedges using array data as radius amount
 		private function explodeSlice(e:ChartItemEvent):void
 		{
+			if(model.explodingArray[e.hitData.chartItem.index]==0){
 				model.explodingArray = [0,0,0,0,0,0];
 				model.explodingArray[e.hitData.chartItem.index]=0.1;
 				model.chart.series[0].perWedgeExplodeRadius = model.explodingArray;
+			}
+			else{
+				model.explodingArray[e.hitData.chartItem.index]=0;
+				model.chart.series[0].perWedgeExplodeRadius = model.explodingArray;
+			}
 		}
 		
 		private function createPieChart(e:ChartItemEvent):void
@@ -343,13 +349,13 @@
 		</mx:ColumnChart>
 
 		<mx:HBox width="100%" id="buttonContainer1" horizontalGap="0">
-			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons1" horizontalAlign="left" width="100%">
+			<mx:HBox paddingLeft="10" paddingBottom="4" id="BackButtons1" horizontalAlign="left" width="100%" horizontalGap="0">
 				<s:Button id="ServiceBack" label="Back" click="pieToRegionChartView();loadXML();" />
 			</mx:HBox>
-			<mx:Text id="bc1Tag" text="Data for:" width="100%" textAlign="right" fontSize="16" visible="false"/>
+			<mx:Text id="bc1Tag" text="  Data for:" width="170" textAlign="right" fontSize="16" visible="false"/>
 			<mx:Text id="bc1Title" text="{model.yearValue}" width="100%" textAlign="left" visible="false" fontWeight="bold"
 					  fontSize="16"/>
-			<mx:HBox paddingRight="7" paddingBottom="4" id="ColumnButtons1" horizontalAlign="right" width="100%">
+			<mx:HBox paddingRight="7" paddingBottom="4" id="ColumnButtons1" horizontalAlign="right" width="100%" horizontalGap="0">
 				<s:Button id="Service" label="Switch to Service" click="{model.dataState=false;}stateSelect();loadXML();" />
 			</mx:HBox>	
 		</mx:HBox>
@@ -381,13 +387,13 @@
 		</mx:ColumnChart>
 		
 		<mx:HBox width="100%" id="buttonContainer2" horizontalGap="0">
-			<mx:HBox paddingBottom="4" paddingLeft="10" id="BackButtons2" horizontalAlign="left" width="100%">
+			<mx:HBox paddingBottom="4" paddingLeft="10" id="BackButtons2" horizontalAlign="left" width="100%" horizontalGap="0">
 				<s:Button id="RegionBack" label="Back" click="pieToServiceChartView();loadXML();"  />
 			</mx:HBox>
-			<mx:Text id="bc2Tag" text="Data for:" width="100%" textAlign="right" fontSize="16" visible="false"/>
+			<mx:Text id="bc2Tag" text="  Data for:" width="170" textAlign="right" fontSize="16" visible="false"/>
 			<mx:Text id="bc2Title" text="{model.yearValue}" width="100%" textAlign="left" visible="false" fontWeight="bold"
 					  fontSize="16"/>
-			<mx:HBox paddingRight="7" paddingBottom="4" id="ColumnButtons2" horizontalAlign="right" width="100%">
+			<mx:HBox paddingRight="7" paddingBottom="4" id="ColumnButtons2" horizontalAlign="right" width="100%" horizontalGap="0">
 				<s:Button id="Region" label="Switch to Region" click="{model.dataState=true;}stateSelect();loadXML();"  />
 			</mx:HBox>
 		</mx:HBox>
