@@ -28,6 +28,8 @@
 		import mx.controls.CheckBox;
 		import mx.effects.Tween;
 		import mx.events.ListEvent;
+		import mx.graphics.SolidColorStroke;
+		import mx.graphics.Stroke;
 		
 		[Bindable]
 		public var model:ChartsModelLocator = ChartsModelLocator.getInstance();
@@ -129,7 +131,7 @@
 			// an array of ColumnSeries objects.
 			var columnSet:ColumnSet = new ColumnSet();
 			columnSet.type = "stacked";
-			
+
 			// Build Data Array
 			seriesDetails = new ArrayCollection([
 				{YField:"Communication", DisplayName:"Communication"},
@@ -218,6 +220,13 @@
 			series = new PieSeries();
 			series.nameField = "Country";			
 			series.field = "Traffic";
+			series.labelFunction = displayGold;
+
+			// Info Display
+			series.setStyle("labelPosition", "callout");
+			series.setStyle("labelFunction", "displayGold");
+			series.setStyle("calloutStroke", callouts);
+			series.setStyle("radialStroke", radial);
 			
 			series.perWedgeExplodeRadius = model.explodingArray;
 			series.setStyle("showDataEffect", interpolate);
@@ -236,6 +245,11 @@
 						
 			/* Add chart and buttons to the display list. */
 			panelActionscript.addChildAt(model.chart, 1);
+		}
+		
+		private function displayGold(data:Object, field:String, index:Number, percentValue:Number):String {
+			var temp:int= Math.round(percentValue);
+			return temp + "%";
 		}
 
 		private function pieRefactoring(e:ChartItemEvent):void
@@ -319,6 +333,13 @@
 	
 	<!-- Format the Chart Axis-->
 	<mx:NumberFormatter id="dataFormatConverterTB" precision="1" rounding="nearest" />
+	
+	<!-- This Stroke is used for the callout lines. -->
+	<mx:SolidColorStroke id="callouts" weight="1" color="0x999999" alpha=".8" caps="square"/>
+	
+	<!-- This Stroke is used to separate the wedges in the pie. -->
+	<mx:SolidColorStroke id="radial" weight="1" color="0xFFFFCC" alpha=".3"/>
+
 
 <mx:VBox>
 	<mx:Panel width="600" title="Mobile Internet Traffic" id="panelActionscript"  horizontalAlign="center">
